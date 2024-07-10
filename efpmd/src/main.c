@@ -43,6 +43,7 @@ void sim_efield(struct state *);
 void sim_elpot(struct state *);
 void sim_gtest(struct state *);
 void sim_etest(struct state *);
+void test_nnp7();
 
 #define USAGE_STRING \
 	"usage: efpmd [-d | -v | -h | input]\n" \
@@ -85,6 +86,7 @@ static struct cfg *make_cfg(void)
 			   EFP_COORD_TYPE_ATOMS});
 
 	cfg_add_string(cfg, "terms", "elec pol disp xr");
+    cfg_add_string(cfg, "special_terms", "elec pol disp xr");
 
 	cfg_add_enum(cfg, "elec_damp", EFP_ELEC_DAMP_SCREEN,
 		"screen\n"
@@ -156,6 +158,12 @@ static struct cfg *make_cfg(void)
     cfg_add_bool(cfg, "enable_pairwise", false);
     cfg_add_bool(cfg, "print_pbc", false);
     cfg_add_bool(cfg, "symmetry", false);
+
+    cfg_add_int(cfg, "special_fragment", -100);
+
+    cfg_add_bool(cfg, "enable_torch", false);
+    cfg_add_int(cfg, "opt_special_frag", -1);
+    cfg_add_string(cfg, "torch_nn", "ani.pt");
 
     cfg_add_enum(cfg, "symm_frag", EFP_SYMM_FRAG_FRAG,
                  "frag\n"
@@ -248,8 +256,11 @@ static unsigned get_terms(const char *str)
 		{ "elec", EFP_TERM_ELEC },
 		{ "pol",  EFP_TERM_POL  },
 		{ "disp", EFP_TERM_DISP },
-		{ "xr",   EFP_TERM_XR   }
-	};
+		{ "xr",   EFP_TERM_XR   },
+        { "qq",   EFP_TERM_QQ   },
+        { "lj",   EFP_TERM_LJ   }
+
+    };
 
 	unsigned terms = 0;
 
@@ -270,10 +281,44 @@ next:
 	return terms;
 }
 
+static unsigned get_special_terms(const char *str)
+{
+    static const struct {
+        const char *name;
+        enum efp_term value;
+    } list[] = {
+            { "elec", EFP_SPEC_TERM_ELEC },
+            { "pol",  EFP_SPEC_TERM_POL  },
+            { "disp", EFP_SPEC_TERM_DISP },
+            { "xr",   EFP_SPEC_TERM_XR   },
+            { "qq",   EFP_SPEC_TERM_QQ   },
+            { "lj",   EFP_SPEC_TERM_LJ   }
+    };
+
+    unsigned terms = 0;
+
+    while (*str) {
+        for (size_t i = 0; i < ARRAY_SIZE(list); i++) {
+            if (efp_strncasecmp(list[i].name, str, strlen(list[i].name)) == 0) {
+                str += strlen(list[i].name);
+                terms |= list[i].value;
+                goto next;
+            }
+        }
+        error("unknown energy term specified");
+        next:
+        while (*str && isspace(*str))
+            str++;
+    }
+
+    return terms;
+}
+
 static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 {
 	struct efp_opts opts = {
 		.terms = get_terms(cfg_get_string(cfg, "terms")),
+        .special_terms = get_special_terms(cfg_get_string(cfg, "special_terms")),
 		.elec_damp = cfg_get_enum(cfg, "elec_damp"),
 		.disp_damp = cfg_get_enum(cfg, "disp_damp"),
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
@@ -284,6 +329,9 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 		.xr_cutoff = cfg_get_double(cfg, "xr_cutoff"),
         .enable_pairwise = cfg_get_bool(cfg, "enable_pairwise"), 
         .ligand = cfg_get_int(cfg, "ligand"),
+        .special_fragment = cfg_get_int(cfg, "special_fragment"),
+        .enable_torch = cfg_get_bool(cfg, "enable_torch"),
+        .opt_special_frag = cfg_get_int(cfg, "opt_special_frag"),
         .print_pbc = cfg_get_bool(cfg, "print_pbc"),
         .symmetry = cfg_get_bool(cfg, "symmetry"),
         .symm_frag = cfg_get_enum(cfg, "symm_frag"),
@@ -363,14 +411,15 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 
 static void state_init(struct state *state, const struct cfg *cfg, const struct sys *sys)
 {
-	size_t ntotal, ifrag, nfrag, natom;
+	printf("marker for coming inside state_init\n\n");
+	size_t ntotal, ifrag, nfrag, natom, spec_frag, n_special_atoms, iatom;
 
 	state->efp = create_efp(cfg, sys);
 	state->energy = 0;
 	state->grad = xcalloc(sys->n_frags * 6 + sys->n_charges * 3, sizeof(double));
 	state->ff = NULL;
-
-
+        state->torch = NULL;
+ 
 	if (cfg_get_bool(cfg, "enable_ff")) {
 		if ((state->ff = ff_create()) == NULL)
 			error("cannot create ff object");
@@ -391,6 +440,46 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 		if (ff_get_atom_count(state->ff) != (int)ntotal)
 			error("total fragment number of atoms does not match .xyz file");
 	}
+
+    // initiate torch state
+    if (cfg_get_bool(cfg, "enable_torch")) {
+        if (cfg_get_int(cfg, "special_fragment") < 0 || cfg_get_int(cfg, "special_fragment") > nfrag-1)
+            error("do not know for which fragment to compute torch: set special_fragment");
+
+        // create torch state
+        if ((state->torch = torch_create()) == NULL)
+            error("cannot create torch object");
+
+        // load torch NN
+//        if (!torch_load_nn(state->torch, cfg_get_string(cfg, "torch_nn")))
+//            printf("Could not load torch nn %s, continue testing\n", cfg_get_string(cfg, "torch_nn"));
+            //error("cannot load torch NN");
+
+
+        spec_frag = cfg_get_int(cfg, "special_fragment");
+        check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
+        torch_init(state->torch, n_special_atoms);
+        state->torch_grad = xcalloc(n_special_atoms * 3, sizeof(double));
+
+        struct efp_atom *special_atoms;
+        special_atoms = xmalloc(n_special_atoms * sizeof(struct efp_atom));
+        check_fail(efp_get_frag_atoms(state->efp, ifrag, n_special_atoms, special_atoms));
+
+        //torch_print(state->torch);
+        double *atom_coord_tmp = malloc(3 * n_special_atoms * sizeof(double));
+        for (iatom = 0; iatom < n_special_atoms; iatom++) {
+            // send atom coordinates to torch
+            atom_coord_tmp[3*iatom] = special_atoms[iatom].x;
+            atom_coord_tmp[3*iatom + 1] = special_atoms[iatom].y;
+            atom_coord_tmp[3*iatom + 2] = special_atoms[iatom].z;
+            // send atom types to torch
+            torch_set_atom_species(state->torch, iatom, (int*)&special_atoms[iatom].znuc);
+        }
+        torch_set_coord(state->torch, atom_coord_tmp);
+        free(special_atoms);
+        free(atom_coord_tmp);
+        //torch_print(state->torch);
+    }
 }
 
 static void print_banner(void)
@@ -530,6 +619,7 @@ int main(int argc, char **argv)
 	msg("TOTAL RUN TIME IS %d SECONDS\n", (int)(difftime(end_time, start_time)));
 	efp_shutdown(state.efp);
 	ff_free(state.ff);
+    torch_free(state.torch);
 	sys_free(state.sys);
 	cfg_free(state.cfg);
 	free(state.grad);

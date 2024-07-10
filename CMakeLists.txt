@@ -13,8 +13,9 @@ project(
   libefp
   # someday when Makefile dropped, configure efp.h.in from cmake
   VERSION ${_libefp_VERSION}
-  LANGUAGES C
+  LANGUAGES C CXX
   )
+set(CMAKE_INSTALL_PREFIX "/depot/lslipche/data/skp/torch_branch_skp/libefp")
 set(libefp_AUTHORS "Ilya A. Kaliman, Lori A. Burns, Dmitry Morozov, Carlos H. Borca, Yen (Terri) Bui, Yongbin Kim, Lyudmila V. Slipchenko")
 set(libefp_DESCRIPTION "Parallel implementation of the Effective Fragment Potential method")
 set(libefp_URL "https://github.com/libefp2/libefp")
@@ -23,6 +24,7 @@ set(libefp_LICENSE "BSD 2-clause")
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 set(efp libefp)  # Namespace
+
 
 # TODO: Remove when requiring cmake >= 3.21  # from LecrisUT/CMake-Template
 if (NOT DEFINED ${efp}_IS_TOP_LEVEL)
