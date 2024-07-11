@@ -84,7 +84,7 @@ void torch_get_coord(struct torch *torch, double *coords) {
 }
 
 void torch_set_coord(struct torch *torch, const double *coords) {
-	printf("marker for coming inside torch_set_coord\n");
+    printf("marker for coming inside torch_set_coord\n");
     memcpy(torch->atom_coords, coords, (3 * torch->natoms) * sizeof(double));
 }
 

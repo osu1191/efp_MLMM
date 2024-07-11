@@ -31,9 +31,11 @@ void sim_opt(struct state *state);
 
 static double compute_efp(size_t n, const double *x, double *gx, void *data)
 {
-	int static opt_switch = 0;
+
+    printf("marker call for entry in compute_efp\n");	
+    int static opt_switch = 0;
     size_t n_frags, n_charge, spec_frag, n_special_atoms;
-	struct state *state = (struct state *)data;
+    struct state *state = (struct state *)data;
 
 	check_fail(efp_get_frag_count(state->efp, &n_frags));
 	check_fail(efp_get_point_charge_count(state->efp, &n_charge));
@@ -48,14 +50,19 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
             // optimize only special fragment atoms
             case 0:
                 assert(n == (3 * n_special_atoms));
-
+		printf("We are running case-0\n");
                 // propagate special fragment coordinates to EFP and update fragment parameters
                 check_fail(update_special_fragment(state->efp, x));
+		printf("We just updated the special fragment\n");
                 // propagate special fragment coordinates to torch
                 torch_set_coord(state->torch, x);
+		printf("We are setting the new coordinates from updated fragment\n");
                 // compute EFP and torch energies and gradients
                 compute_energy(state, true);
-
+		printf("Finished running 'compute_energy()' which traverses through torch routines\n");
+		// after this line its goin to the top of the routine again for some reason
+		// thats why update_special_fragment is occuring multiple times for the same step
+		// WHY??
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTorch gradient\n");
                     for (size_t i = 0; i < n; i++) {
@@ -64,7 +71,8 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
                 }
 
                 // combine EFP and torch (atomic) gradients on special fragments
-                check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
+	        // commenting this for now... trying to optimizing 1 fragment only with torch gradients	
+                // check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
 
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTotal torch + EFP gradient\n");
@@ -338,8 +346,12 @@ void static opt_spec_frag_only(struct state *state)
 
     msg("    INITIAL STATE\n\n");
     print_status(state, 0.0, rms_grad, max_grad);
-
+    printf("We should be entering the loop of optimization\n");
+    // some how compute_efp is evoked here....... WHY??
+    // Its happening more than 1 time before entering the following loop....
+ 
     for (int step = 1; step <= cfg_get_int(state->cfg, "max_steps"); step++) {
+	printf("Inside the optimization loop... this is step %4d\n",step);
         if (opt_step(opt_state))
             error("unable to make an optimization step");
 
@@ -359,7 +371,7 @@ void static opt_spec_frag_only(struct state *state)
 
         e_old = e_new;
     }
-
+    // some how compute_efp is evoked here....... WHY??
     opt_shutdown(opt_state);
 
     msg("SPECIAL FRAGMENT ENERGY MINIMIZATION JOB COMPLETED SUCCESSFULLY\n");
