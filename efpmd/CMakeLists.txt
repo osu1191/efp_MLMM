@@ -36,7 +36,6 @@ add_executable(
     src/torch.c
   )
  
-#set (TORCH_LIBRARIES "/home/paulsk/libtorch/lib/")
 set(TORCH_INCLUDE_DIRS "/depot/lslipche/data/skp/libtorch/include/;/depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include")
 
 message("TORCH_INSTALL_PREFIX =  ${TORCH_INSTALL_PREFIX}")

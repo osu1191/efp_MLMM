@@ -25,7 +25,7 @@
  */
 
 #include "common.h"
-#include "../torch/torch.h"
+//#include "../torch/torch.h"
 
 /* current coordinates from efp struct are used */
 void compute_energy(struct state *state, bool do_grad)

@@ -26,6 +26,7 @@
 
 #include "common.h"
 #include "opt.h"
+#include "../torch/c_libtorch.h"
 
 void sim_opt(struct state *state);
 

@@ -1,0 +1,263 @@
+TORCH_DIR =  /depot/lslipche/data/skp/libtorch
+-- The C compiler identification is GNU 10.2.0
+-- The CXX compiler identification is GNU 10.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpiCC - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Setting (unspecified) option CMAKE_BUILD_TYPE: Release
+-- Setting (unspecified) option BUILD_SHARED_LIBS: OFF
+-- Setting (unspecified) option BUILD_FPIC: ON
+-- Setting (unspecified) option LIBEFP_ENABLE_OPENMP: OFF
+-- Setting (unspecified) option ENABLE_GENERIC: OFF
+-- Setting (unspecified) option ENABLE_XHOST: ON
+-- Performing Test CMAKE_C_FLAGS [-march=native] - Success, Appending
+-- Performing Test CMAKE_CXX_FLAGS [-march=native] - Success, Appending
+-- Setting (unspecified) option FRAGLIB_UNDERSCORE_L: ON
+-- Setting (unspecified) option FRAGLIB_DEEP: ON
+-- Setting (unspecified) option INSTALL_DEVEL_HEADERS: OFF
+-- Setting (unspecified) option LIBEFP_CMAKECONFIG_INSTALL_DIR: share/cmake/libefp
+-- Setting (unspecified) option LIBEFP_ENABLE_EFPMD: ON
+-- Setting (unspecified) option PYMOD_INSTALL_LIBDIR: /
+-- Setting (unspecified) option LIBEFP_ENABLE_PYTHON: OFF
+-- Looking for sgemm_
+-- Looking for sgemm_ - not found
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Looking for sgemm_
+-- Looking for sgemm_ - found
+-- Found BLAS: /apps/spack/bell/apps/openblas/0.3.8-gcc-10.2.0-yierafl/lib/libopenblas.so  
+-- LAPACK detected.
+-- Found TargetLAPACK: Found LAPACK: /apps/spack/bell/apps/openblas/0.3.8-gcc-10.2.0-yierafl/lib/libopenblas.so;-lm;-ldl  
+-- The Fortran compiler identification is GNU 10.2.0
+-- Detecting Fortran compiler ABI info
+-- Detecting Fortran compiler ABI info - done
+-- Check for working Fortran compiler: /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90 - skipped
+-- Checking whether /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90 supports Fortran 90
+-- Checking whether /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90 supports Fortran 90 - yes
+-- Found Torch: /depot/lslipche/data/skp/libtorch/lib/libtorch.so  
+TORCH_INSTALL_PREFIX =  /depot/lslipche/data/skp/libtorch
+TORCH_LIBRARIES =  torch;torch_library;/depot/lslipche/data/skp/libtorch/lib/libc10.so;/depot/lslipche/data/skp/libtorch/lib/libkineto.a
+TORCH_INCLUDE_DIRS =  /depot/lslipche/data/skp/libtorch/include/;/depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /depot/lslipche/data/skp/torch_skp_branch/libefp/build4
+/apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -S/depot/lslipche/data/skp/torch_skp_branch/libefp -B/depot/lslipche/data/skp/torch_skp_branch/libefp/build4 --check-build-system CMakeFiles/Makefile.cmake 0
+/apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_progress_start /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles /depot/lslipche/data/skp/torch_skp_branch/libefp/build4//CMakeFiles/progress.marks
+make  -f CMakeFiles/Makefile2 all
+make[1]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f CMakeFiles/efp.dir/build.make CMakeFiles/efp.dir/depend
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_depends "Unix Makefiles" /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles/efp.dir/DependInfo.cmake --color=
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles/efp.dir/DependInfo.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles/efp.dir/depend.internal".
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles/efp.dir/depend.internal".
+Scanning dependencies of target efp
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f CMakeFiles/efp.dir/build.make CMakeFiles/efp.dir/build
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[  2%] Building C object CMakeFiles/efp.dir/src/aidisp.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/aidisp.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/aidisp.c
+[  5%] Building C object CMakeFiles/efp.dir/src/balance.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/balance.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/balance.c
+[  7%] Building C object CMakeFiles/efp.dir/src/clapack.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/clapack.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/clapack.c
+[ 10%] Building C object CMakeFiles/efp.dir/src/disp.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/disp.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/disp.c
+[ 12%] Building C object CMakeFiles/efp.dir/src/efp.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/efp.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/efp.c
+[ 15%] Building C object CMakeFiles/efp.dir/src/elec.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/elec.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/elec.c
+[ 17%] Building C object CMakeFiles/efp.dir/src/electerms.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/electerms.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/electerms.c
+[ 20%] Building C object CMakeFiles/efp.dir/src/int.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/int.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/int.c
+[ 22%] Building C object CMakeFiles/efp.dir/src/log.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/log.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/log.c
+[ 25%] Building C object CMakeFiles/efp.dir/src/parse.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/parse.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/parse.c
+[ 27%] Building C object CMakeFiles/efp.dir/src/pol.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/pol.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/pol.c
+[ 30%] Building C object CMakeFiles/efp.dir/src/poldirect.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/poldirect.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/poldirect.c
+[ 32%] Building C object CMakeFiles/efp.dir/src/stream.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/stream.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/stream.c
+[ 35%] Building C object CMakeFiles/efp.dir/src/swf.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/swf.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/swf.c
+[ 37%] Building C object CMakeFiles/efp.dir/src/util.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/util.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/util.c
+[ 40%] Building C object CMakeFiles/efp.dir/src/xr.c.o
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -std=c99 -o CMakeFiles/efp.dir/src/xr.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/src/xr.c
+[ 42%] Linking C static library libefp.a
+/apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -P CMakeFiles/efp.dir/cmake_clean_target.cmake
+/apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_link_script CMakeFiles/efp.dir/link.txt --verbose=1
+/usr/bin/ar qc libefp.a CMakeFiles/efp.dir/src/aidisp.c.o CMakeFiles/efp.dir/src/balance.c.o CMakeFiles/efp.dir/src/clapack.c.o CMakeFiles/efp.dir/src/disp.c.o CMakeFiles/efp.dir/src/efp.c.o CMakeFiles/efp.dir/src/elec.c.o CMakeFiles/efp.dir/src/electerms.c.o CMakeFiles/efp.dir/src/int.c.o CMakeFiles/efp.dir/src/log.c.o CMakeFiles/efp.dir/src/parse.c.o CMakeFiles/efp.dir/src/pol.c.o CMakeFiles/efp.dir/src/poldirect.c.o CMakeFiles/efp.dir/src/stream.c.o CMakeFiles/efp.dir/src/swf.c.o CMakeFiles/efp.dir/src/util.c.o CMakeFiles/efp.dir/src/xr.c.o
+/usr/bin/ranlib libefp.a
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 42%] Built target efp
+make  -f efpmd/CMakeFiles/libff.dir/build.make efpmd/CMakeFiles/libff.dir/depend
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_depends "Unix Makefiles" /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libff.dir/DependInfo.cmake --color=
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libff.dir/DependInfo.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libff.dir/depend.internal".
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libff.dir/depend.internal".
+Scanning dependencies of target libff
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f efpmd/CMakeFiles/libff.dir/build.make efpmd/CMakeFiles/libff.dir/build
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 45%] Building C object efpmd/CMakeFiles/libff.dir/libff/ff.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -o CMakeFiles/libff.dir/libff/ff.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff/ff.c
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 45%] Built target libff
+make  -f efpmd/CMakeFiles/ctorch.dir/build.make efpmd/CMakeFiles/ctorch.dir/depend
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_depends "Unix Makefiles" /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/ctorch.dir/DependInfo.cmake --color=
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/ctorch.dir/DependInfo.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/ctorch.dir/depend.internal".
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/ctorch.dir/depend.internal".
+Scanning dependencies of target ctorch
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f efpmd/CMakeFiles/ctorch.dir/build.make efpmd/CMakeFiles/ctorch.dir/build
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 47%] Building CXX object efpmd/CMakeFiles/ctorch.dir/torch/c_libtorch.cc.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpiCC -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/ctorch.dir/torch/c_libtorch.cc.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc: In function 'void calculateEnergyAndForces(torch::jit::script::Module&, const std::vector<Atom>&)':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc:182:63: warning: narrowing conversion of '(& atoms)->std::vector<Atom>::size()' from 'std::vector<Atom>::size_type' {aka 'long unsigned int'} to 'long int' [-Wnarrowing]
+  182 |     torch::Tensor coordinatesTensor = torch::zeros({atoms.size(), 3});
+      |                                                     ~~~~~~~~~~^~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc:182:63: warning: narrowing conversion of '(& atoms)->std::vector<Atom>::size()' from 'std::vector<Atom>::size_type' {aka 'long unsigned int'} to 'long int' [-Wnarrowing]
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc:183:59: warning: narrowing conversion of '(& atoms)->std::vector<Atom>::size()' from 'std::vector<Atom>::size_type' {aka 'long unsigned int'} to 'long int' [-Wnarrowing]
+  183 |     torch::Tensor speciesTensor = torch::zeros({atoms.size()});
+      |                                                 ~~~~~~~~~~^~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/c_libtorch.cc:183:59: warning: narrowing conversion of '(& atoms)->std::vector<Atom>::size()' from 'std::vector<Atom>::size_type' {aka 'long unsigned int'} to 'long int' [-Wnarrowing]
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 47%] Built target ctorch
+make  -f efpmd/CMakeFiles/libopt.dir/build.make efpmd/CMakeFiles/libopt.dir/depend
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_depends "Unix Makefiles" /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libopt.dir/DependInfo.cmake --color=
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libopt.dir/DependInfo.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libopt.dir/depend.internal".
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/libopt.dir/depend.internal".
+Scanning dependencies of target libopt
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f efpmd/CMakeFiles/libopt.dir/build.make efpmd/CMakeFiles/libopt.dir/build
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 50%] Building C object efpmd/CMakeFiles/libopt.dir/libopt/opt.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc   -march=native -O3 -DNDEBUG -fPIC -o CMakeFiles/libopt.dir/libopt/opt.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt/opt.c
+[ 52%] Building Fortran object efpmd/CMakeFiles/libopt.dir/libopt/blas.f.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90   -O3 -DNDEBUG -O3 -fPIC -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt/blas.f -o CMakeFiles/libopt.dir/libopt/blas.f.o
+[ 55%] Building Fortran object efpmd/CMakeFiles/libopt.dir/libopt/lbfgsb.f.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90   -O3 -DNDEBUG -O3 -fPIC -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt/lbfgsb.f -o CMakeFiles/libopt.dir/libopt/lbfgsb.f.o
+[ 57%] Building Fortran object efpmd/CMakeFiles/libopt.dir/libopt/linpack.f.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90   -O3 -DNDEBUG -O3 -fPIC -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt/linpack.f -o CMakeFiles/libopt.dir/libopt/linpack.f.o
+[ 60%] Building Fortran object efpmd/CMakeFiles/libopt.dir/libopt/timer.f.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpif90   -O3 -DNDEBUG -O3 -fPIC -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt/timer.f -o CMakeFiles/libopt.dir/libopt/timer.f.o
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 60%] Built target libopt
+make  -f efpmd/CMakeFiles/efpmd.dir/build.make efpmd/CMakeFiles/efpmd.dir/depend
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_depends "Unix Makefiles" /depot/lslipche/data/skp/torch_skp_branch/libefp /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4 /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/efpmd.dir/DependInfo.cmake --color=
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/efpmd.dir/DependInfo.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/efpmd.dir/depend.internal".
+Dependee "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd/CMakeFiles/efpmd.dir/depend.internal".
+Scanning dependencies of target efpmd
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+make  -f efpmd/CMakeFiles/efpmd.dir/build.make efpmd/CMakeFiles/efpmd.dir/build
+make[2]: Entering directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[ 62%] Building C object efpmd/CMakeFiles/efpmd.dir/src/cfg.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/cfg.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/cfg.c
+[ 65%] Building C object efpmd/CMakeFiles/efpmd.dir/src/common.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/common.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/common.c
+[ 67%] Building C object efpmd/CMakeFiles/efpmd.dir/src/efield.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/efield.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/efield.c
+[ 70%] Building C object efpmd/CMakeFiles/efpmd.dir/src/energy.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/energy.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c: In function 'compute_energy':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c:82:9: warning: implicit declaration of function 'torch_compute'; did you mean 'ff_compute'? [-Wimplicit-function-declaration]
+   82 |         torch_compute(state->torch, do_grad);
+      |         ^~~~~~~~~~~~~
+      |         ff_compute
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c:83:31: warning: implicit declaration of function 'torch_get_energy'; did you mean 'ff_get_energy'? [-Wimplicit-function-declaration]
+   83 |         state->torch_energy = torch_get_energy(state->torch);
+      |                               ^~~~~~~~~~~~~~~~
+      |                               ff_get_energy
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c:87:13: warning: implicit declaration of function 'torch_get_gradient'; did you mean 'efp_get_gradient'? [-Wimplicit-function-declaration]
+   87 |             torch_get_gradient(state->torch, state->torch_grad);
+      |             ^~~~~~~~~~~~~~~~~~
+      |             efp_get_gradient
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/energy.c:89:9: warning: implicit declaration of function 'torch_print' [-Wimplicit-function-declaration]
+   89 |         torch_print(state->torch);
+      |         ^~~~~~~~~~~
+[ 72%] Building C object efpmd/CMakeFiles/efpmd.dir/src/grad.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/grad.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/grad.c
+[ 75%] Building C object efpmd/CMakeFiles/efpmd.dir/src/gtest.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/gtest.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/gtest.c
+[ 77%] Building C object efpmd/CMakeFiles/efpmd.dir/src/hess.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/hess.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/hess.c
+[ 80%] Building C object efpmd/CMakeFiles/efpmd.dir/src/main.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/main.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c: In function 'state_init':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:450:29: warning: implicit declaration of function 'torch_create'; did you mean 'timer_create'? [-Wimplicit-function-declaration]
+  450 |         if ((state->torch = torch_create()) == NULL)
+      |                             ^~~~~~~~~~~~
+      |                             timer_create
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:450:27: warning: assignment to 'struct torch *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  450 |         if ((state->torch = torch_create()) == NULL)
+      |                           ^
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:461:9: warning: implicit declaration of function 'torch_init' [-Wimplicit-function-declaration]
+  461 |         torch_init(state->torch, n_special_atoms);
+      |         ^~~~~~~~~~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:476:13: warning: implicit declaration of function 'torch_set_atom_species' [-Wimplicit-function-declaration]
+  476 |             torch_set_atom_species(state->torch, iatom, (int*)&special_atoms[iatom].znuc);
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:478:9: warning: implicit declaration of function 'torch_set_coord' [-Wimplicit-function-declaration]
+  478 |         torch_set_coord(state->torch, atom_coord_tmp);
+      |         ^~~~~~~~~~~~~~~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c: In function 'main':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/main.c:622:5: warning: implicit declaration of function 'torch_free' [-Wimplicit-function-declaration]
+  622 |     torch_free(state.torch);
+      |     ^~~~~~~~~~
+[ 82%] Building C object efpmd/CMakeFiles/efpmd.dir/src/md.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/md.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/md.c
+[ 85%] Building C object efpmd/CMakeFiles/efpmd.dir/src/msg.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/msg.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/msg.c
+[ 87%] Building C object efpmd/CMakeFiles/efpmd.dir/src/opt.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/opt.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/opt.c
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/opt.c: In function 'compute_efp':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/opt.c:58:17: warning: implicit declaration of function 'torch_set_coord' [-Wimplicit-function-declaration]
+   58 |                 torch_set_coord(state->torch, x);
+      |                 ^~~~~~~~~~~~~~~
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/opt.c: In function 'opt_spec_frag_only':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/opt.c:338:5: warning: implicit declaration of function 'torch_get_coord' [-Wimplicit-function-declaration]
+  338 |     torch_get_coord(state->torch, coord);
+      |     ^~~~~~~~~~~~~~~
+[ 90%] Building C object efpmd/CMakeFiles/efpmd.dir/src/parse.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/parse.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/parse.c
+[ 92%] Building C object efpmd/CMakeFiles/efpmd.dir/src/rand.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/rand.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/rand.c
+[ 95%] Building C object efpmd/CMakeFiles/efpmd.dir/src/sp.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/sp.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/sp.c
+[ 97%] Building C object efpmd/CMakeFiles/efpmd.dir/src/torch.c.o
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpicc -DFRAGLIB_PATH=\"/../fraglib\" -DUSE_C10D_GLOO -DUSE_DISTRIBUTED -DUSE_RPC -DUSE_TENSORPIPE -DUSING_libefp -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libff -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/libopt -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/../src -I/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/ctorch -isystem /depot/lslipche/data/skp/libtorch/include -isystem /depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include -march=native -O3 -DNDEBUG -fPIE -D_GLIBCXX_USE_CXX11_ABI=0 -o CMakeFiles/efpmd.dir/src/torch.c.o -c /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/torch.c
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/torch.c: In function 'torch_compute':
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/torch.c:126:27: warning: passing argument 1 of 'get_torch_energy_grad' from incompatible pointer type [-Wincompatible-pointer-types]
+  126 |     get_torch_energy_grad(frag_coordinates, frag_spec, n_atoms, energies, gradients, forces);
+      |                           ^~~~~~~~~~~~~~~~
+      |                           |
+      |                           float (*)[3]
+In file included from /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/torch.h:31,
+                 from /depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/torch.c:27:
+/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/src/../torch/c_libtorch.h:101:35: note: expected 'float *' but argument is of type 'float (*)[3]'
+  101 | void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces);
+      |                            ~~~~~~~^~~~~~~~~~~~~~~~
+[100%] Linking CXX executable efpmd
+cd /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/efpmd && /apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_link_script CMakeFiles/efpmd.dir/link.txt --verbose=1
+/apps/spack/bell/apps/openmpi/3.1.6-gcc-10.2.0-kn4ct52/bin/mpiCC  -march=native -O3 -DNDEBUG CMakeFiles/efpmd.dir/src/cfg.c.o CMakeFiles/efpmd.dir/src/common.c.o CMakeFiles/efpmd.dir/src/efield.c.o CMakeFiles/efpmd.dir/src/energy.c.o CMakeFiles/efpmd.dir/src/grad.c.o CMakeFiles/efpmd.dir/src/gtest.c.o CMakeFiles/efpmd.dir/src/hess.c.o CMakeFiles/efpmd.dir/src/main.c.o CMakeFiles/efpmd.dir/src/md.c.o CMakeFiles/efpmd.dir/src/msg.c.o CMakeFiles/efpmd.dir/src/opt.c.o CMakeFiles/efpmd.dir/src/parse.c.o CMakeFiles/efpmd.dir/src/rand.c.o CMakeFiles/efpmd.dir/src/sp.c.o CMakeFiles/efpmd.dir/src/torch.c.o CMakeFiles/ctorch.dir/torch/c_libtorch.cc.o CMakeFiles/libff.dir/libff/ff.c.o CMakeFiles/libopt.dir/libopt/opt.c.o CMakeFiles/libopt.dir/libopt/blas.f.o CMakeFiles/libopt.dir/libopt/lbfgsb.f.o CMakeFiles/libopt.dir/libopt/linpack.f.o CMakeFiles/libopt.dir/libopt/timer.f.o -o efpmd  -Wl,-rpath,/depot/lslipche/data/skp/libtorch/lib::::::::::::::::: ../libefp.a /apps/spack/bell/apps/openblas/0.3.8-gcc-10.2.0-yierafl/lib/libopenblas.so -lm -ldl /depot/lslipche/data/skp/libtorch/lib/libtorch.so -Wl,--no-as-needed,"/depot/lslipche/data/skp/libtorch/lib/libtorch_cpu.so" -Wl,--as-needed /depot/lslipche/data/skp/libtorch/lib/libc10.so -Wl,--no-as-needed,"/depot/lslipche/data/skp/libtorch/lib/libtorch.so" -Wl,--as-needed /depot/lslipche/data/skp/libtorch/lib/libc10.so /depot/lslipche/data/skp/libtorch/lib/libkineto.a -lmpi_usempif08 -lmpi_usempi_ignore_tkr -lmpi_mpifh -lgfortran -lquadmath 
+make[2]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+[100%] Built target efpmd
+make[1]: Leaving directory `/depot/lslipche/data/skp/torch_skp_branch/libefp/build4'
+/apps/spack/bell/apps/cmake/3.18.2-gcc-10.2.0-z3hxs65/bin/cmake -E cmake_progress_start /depot/lslipche/data/skp/torch_skp_branch/libefp/build4/CMakeFiles 0
