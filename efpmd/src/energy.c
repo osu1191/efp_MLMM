@@ -25,6 +25,7 @@
  */
 
 #include "common.h"
+#include "torch.h"
 //#include "../torch/torch.h"
 
 /* current coordinates from efp struct are used */

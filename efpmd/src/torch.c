@@ -123,7 +123,7 @@ void torch_compute(struct torch *torch, int do_grad) {
     float total_energy = 0.0;
 
     // call function
-    get_torch_energy_grad(frag_coordinates, frag_spec, n_atoms, energies, gradients, forces);
+    get_torch_energy_grad((float*)frag_coordinates, frag_spec, n_atoms, energies, gradients, forces);
 
     // print torch data for verification
     
