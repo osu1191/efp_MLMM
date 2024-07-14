@@ -12,7 +12,20 @@
 #include <vector>
 #include <memory>
 
+#include <cstdint>
+
 using namespace torch::autograd;
+
+
+//====================//
+
+struct Atom {
+    std::string species;
+    std::vector<float> coordinates;
+};
+
+
+//====================//
 
 namespace {
 
@@ -177,6 +190,7 @@ int64_t mapSpeciesToInteger(const std::string& species) {
         return 0; // Default value if species is unknown
 }
 
+/*
 void calculateEnergyAndForces(torch::jit::script::Module& model, const std::vector<Atom>& atoms) {
     // Create the input tensors
     torch::Tensor coordinatesTensor = torch::zeros({atoms.size(), 3});
@@ -221,6 +235,44 @@ void calculateEnergyAndForces(torch::jit::script::Module& model, const std::vect
         std::cout << forceVec[0] << ", " << forceVec[1] << ", " << forceVec[2] << std::endl;
     }
 }    
+*/
+
+void calculateEnergyAndForces2(torch::jit::script::Module& model, const std::vector<Atom>& atoms) {
+    int64_t num_atoms = static_cast<int64_t>(atoms.size());
+    torch::Tensor coordinatesTensor = torch::zeros({num_atoms, 3});
+    torch::Tensor speciesTensor = torch::zeros({num_atoms});
+
+    for (int64_t i = 0; i < num_atoms; ++i) {
+        const Atom& atom = atoms[i];
+        coordinatesTensor[i][0] = atom.coordinates[0];
+        coordinatesTensor[i][1] = atom.coordinates[1];
+        coordinatesTensor[i][2] = atom.coordinates[2];
+        speciesTensor[i] = mapSpeciesToInteger(atom.species);
+    }
+
+    torch::IValue input = torch::ivalue::Tuple::create({coordinatesTensor, speciesTensor});
+
+    torch::jit::IValue output = model.forward({input});
+
+    torch::Tensor energyTensor = output.toTuple()->elements()[0].toTensor();
+    torch::Tensor forcesTensor = output.toTuple()->elements()[1].toTensor();
+
+    float energy = energyTensor.item<float>();
+    std::vector<std::vector<float>> forces;
+    for (int64_t i = 0; i < forcesTensor.size(0); ++i) {
+        std::vector<float> forceVec;
+        forceVec.push_back(forcesTensor[i][0].item<float>());
+        forceVec.push_back(forcesTensor[i][1].item<float>());
+        forceVec.push_back(forcesTensor[i][2].item<float>());
+        forces.push_back(forceVec);
+    }
+
+    std::cout << "Energy: " << energy << std::endl;
+    std::cout << "Forces:" << std::endl;
+    for (const auto& forceVec : forces) {
+        std::cout << forceVec[0] << ", " << forceVec[1] << ", " << forceVec[2] << std::endl;
+    }
+}
 
 
 /*
@@ -800,7 +852,7 @@ void calculateEnergyAndForcesWrapper(void* model, Atom* atoms, size_t num_atoms)
     std::vector<Atom> atomsVec(atoms, atoms + num_atoms);
 
     // Call the calculateEnergyAndForces function
-    calculateEnergyAndForces(*torchModel, atomsVec);
+    calculateEnergyAndForces2(*torchModel, atomsVec);
 }
 
 void nnp_test6_wrapper(float* coordinates_data, int* species_data, int num_atoms) {

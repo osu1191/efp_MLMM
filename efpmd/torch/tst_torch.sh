@@ -15,3 +15,5 @@ echo "TORCH_DIR = " ${TORCH_INSTALLED_DIR}
 
 Torch_DIR=${TORCH_INSTALLED_DIR} \
 cmake ..
+
+make

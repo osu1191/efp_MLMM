@@ -100,10 +100,10 @@ void generateSpeciesEnergyForcesWrapper(const void* model, const float* const* c
 void nnp_test6_wrapper(float* coordinates_data, int* species_data, int num_atoms);
 void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces);
 
-typedef struct {
-    char* species;
-    float* coordinates;
-} Atom;
+//typedef struct {
+//    char* species;
+//    float* coordinates;
+//} Atom;
 
 //typedef struct {
 //    const char* species;
