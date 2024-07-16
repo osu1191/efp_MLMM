@@ -74,7 +74,7 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
 
                 // combine EFP and torch (atomic) gradients on special fragments
 	        // commenting this for now... trying to optimizing 1 fragment only with torch gradients	
-                // check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
+                //check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
 
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTotal torch + EFP gradient\n");

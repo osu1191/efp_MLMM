@@ -48,4 +48,5 @@ double torch_get_energy(struct torch *torch);
 void torch_get_gradient(struct torch *, double *);
 void torch_free(struct torch *);
 void torch_print(struct torch *);
+int get_torch_type(const char *);
 //void torch_single_frag(struct torch *, size_t frag_idx, float *energies, float *gradients, float *forces);

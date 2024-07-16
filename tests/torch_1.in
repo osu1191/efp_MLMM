@@ -5,8 +5,9 @@ disp_damp off
 fraglib_path ../fraglib
 special_fragment 0
 enable_torch true
+torch_nn ani2.pt
 opt_special_frag 0
-
+max_steps 200
 
 fragment h2o_l
    0.000   0.000   0.000   0.000   0.000   0.000

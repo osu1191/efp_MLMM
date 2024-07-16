@@ -1,5 +1,3 @@
-rm: cannot remove ‘build4/efpmd/.nfs0000000017be1b7600000266’: Device or resource busy
-mkdir: cannot create directory ‘build4’: File exists
 TORCH_DIR =  /depot/lslipche/data/skp/libtorch
 -- The C compiler identification is GNU 10.2.0
 -- The CXX compiler identification is GNU 10.2.0

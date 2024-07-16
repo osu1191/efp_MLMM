@@ -80,7 +80,11 @@ void compute_energy(struct state *state, bool do_grad)
     if (cfg_get_bool(state->cfg, "enable_torch")) {
         // prototype to compute energy and gradients with torch
         // torch_compute_energy(struct torch *, bool do_grad);
-        torch_compute(state->torch, do_grad);
+
+	int torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
+        printf("torch_model_type %d\n",torch_model_type);
+
+        torch_compute(state->torch, torch_model_type);
         state->torch_energy = torch_get_energy(state->torch);
         state->energy += state->torch_energy;
 

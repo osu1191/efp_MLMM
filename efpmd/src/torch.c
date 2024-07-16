@@ -26,6 +26,7 @@
 
 #include "torch.h"
 #include "common.h"
+#include "cfg.h"
 #include <stdio.h>
 #include "../torch/c_libtorch.h"
 
@@ -43,23 +44,29 @@ struct torch *torch_create(void) {
     return (torch);
 }
 
+int get_torch_type(const char *str) {
+    int file_type;
+    if (strcmp(str, "ani1.pt") == 0) {
+        file_type = 1;
+        fprintf(stderr, "chosen nn_type: %s\n", str);
+    } else if (strcmp(str, "ani2.pt") == 0) {
+        file_type = 2;
+        fprintf(stderr, "chosen nn_type: %s\n", str);
+    } else {
+        file_type = -1; // or any other default/error value
+        fprintf(stderr, "Unknown filetype: %s\n", str);
+    }
+    return file_type;
+}
+
 void torch_init(struct torch *torch, size_t natom) {
     torch->natoms = natom;
     torch->atom_coords = malloc(3*natom*sizeof(double));
     torch->atom_types = malloc(natom*sizeof(int));
     torch->grad = malloc(3*natom*sizeof(double));
 }
-
-int torch_load_nn(struct torch *torch, const char *nn_name) {
-    // load NN
-    FILE *fp;
-    if ((fp = fopen(nn_name, "r")) == NULL)
-        return (0);
-    fclose(fp);
-
-    // blah
-    return (1);
-}
+ 
+//int torch_load_nn(struct torch *torch, const char *nn_name) {
 
 void torch_get_atom_count(struct torch *torch , size_t natom) {
     natom = torch->natoms;
@@ -94,7 +101,7 @@ void torch_set_atom_species(struct torch *torch, size_t atom, int *atom_z) {
 }
 
 // SKP's torch version
-void torch_compute(struct torch *torch, int do_grad) {
+void torch_compute(struct torch *torch, int model_type) {
 
     // prepare data arrays 
     msg("SINGLE FRAGMENT TORCH JOB\n-------------------------\n");
@@ -106,7 +113,7 @@ void torch_compute(struct torch *torch, int do_grad) {
     energies = malloc(n_atoms * sizeof(float));
     gradients = malloc(n_atoms * 3 * sizeof(float));
     forces = malloc(n_atoms * 3 * sizeof(float));
- 
+
     for (size_t i=0; i<n_atoms; i++) {
         frag_coordinates[i][0] = (float)torch->atom_coords[i*3] * BOHR_RADIUS;
         frag_coordinates[i][1] = (float)torch->atom_coords[i*3+1] * BOHR_RADIUS;
@@ -123,7 +130,7 @@ void torch_compute(struct torch *torch, int do_grad) {
     float total_energy = 0.0;
 
     // call function
-    get_torch_energy_grad((float*)frag_coordinates, frag_spec, n_atoms, energies, gradients, forces);
+    get_torch_energy_grad((float*)frag_coordinates, frag_spec, n_atoms, energies, gradients, forces, model_type);
 
     // print torch data for verification
     

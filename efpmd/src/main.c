@@ -86,7 +86,7 @@ static struct cfg *make_cfg(void)
 			   EFP_COORD_TYPE_ATOMS});
 
 	cfg_add_string(cfg, "terms", "elec pol disp xr");
-    cfg_add_string(cfg, "special_terms", "elec pol disp xr");
+    	cfg_add_string(cfg, "special_terms", "elec pol disp xr");
 
 	cfg_add_enum(cfg, "elec_damp", EFP_ELEC_DAMP_SCREEN,
 		"screen\n"
@@ -318,7 +318,7 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 {
 	struct efp_opts opts = {
 		.terms = get_terms(cfg_get_string(cfg, "terms")),
-        .special_terms = get_special_terms(cfg_get_string(cfg, "special_terms")),
+        	.special_terms = get_special_terms(cfg_get_string(cfg, "special_terms")),
 		.elec_damp = cfg_get_enum(cfg, "elec_damp"),
 		.disp_damp = cfg_get_enum(cfg, "disp_damp"),
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
@@ -451,11 +451,16 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
             error("cannot create torch object");
 
         // load torch NN
-//        if (!torch_load_nn(state->torch, cfg_get_string(cfg, "torch_nn")))
-//            printf("Could not load torch nn %s, continue testing\n", cfg_get_string(cfg, "torch_nn"));
+        //if (!torch_load_nn(state->torch, cfg_get_string(cfg, "torch_nn")))
+        //    printf("Could not load torch nn %s, continue testing\n", cfg_get_string(cfg, "torch_nn"));
             //error("cannot load torch NN");
+	//int torch_file_type;
+	//assign_file_type(cfg, torch_file_type);
+        //printf("Assigned file type: %d\n", torch_file_type);
 
-
+	//int torch_model_type = get_torch_type(cfg_get_string(cfg, "torch_nn"));
+	//printf("torch_model_type %d\n",torch_model_type); 	
+ 
         spec_frag = cfg_get_int(cfg, "special_fragment");
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
         torch_init(state->torch, n_special_atoms);
