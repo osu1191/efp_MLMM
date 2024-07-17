@@ -411,7 +411,7 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 
 static void state_init(struct state *state, const struct cfg *cfg, const struct sys *sys)
 {
-	printf("marker for coming inside state_init\n\n");
+	if (cfg_get_int(state->cfg, "print") == 5) printf("marker for coming inside state_init\n\n");
 	size_t ntotal, ifrag, nfrag, natom, spec_frag, n_special_atoms, iatom;
 
 	state->efp = create_efp(cfg, sys);

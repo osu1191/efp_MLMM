@@ -1125,7 +1125,7 @@ update_special_fragment(struct efp *efp, const double *coord)
 {
     assert(efp);
     assert(coord);
-
+    //printf("Inside update_special_fragment\n");
     size_t fr_i = efp->opts.special_fragment;
     struct frag *spec_frag = efp->frags + fr_i;
 

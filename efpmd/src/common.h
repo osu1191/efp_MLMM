@@ -113,6 +113,8 @@ struct state {
     double torch_energy;
 	double *grad;
     double *torch_grad;
+	int counter;
+	int init;
 };
 
 void NORETURN die(const char *, ...);

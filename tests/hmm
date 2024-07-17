@@ -1,0 +1,374 @@
+EFPMD ver. 1.8.0
+Copyright (c) 2012-2017 Ilya Kaliman
+
+LIBEFP ver. 1.8.0
+Copyright (c) 2012-2017 Ilya Kaliman
+              2018-2022 Lyudmila Slipchenko
+
+Journal References:
+  - Kaliman and Slipchenko, JCC 2013.
+    DOI: http://dx.doi.org/10.1002/jcc.23375
+  - Kaliman and Slipchenko, JCC 2015.
+    DOI: http://dx.doi.org/10.1002/jcc.23772
+
+Project web site: https://github.com/libefp2/libefp/
+
+RUNNING 1 MPI PROCESSES WITH 1 OPENMP THREADS EACH
+WALL CLOCK TIME IS Wed Jul 17 04:24:20 2024
+
+SIMULATION SETTINGS
+
+run_type opt
+coord xyzabc
+terms elec pol disp xr
+special_terms elec pol disp xr
+elec_damp screen
+disp_damp off
+pol_damp tt
+pol_driver iterative
+enable_ff false
+enable_multistep false
+ff_geometry ff.xyz
+ff_parameters /../fraglib/params/amber99.prm
+single_params_file false
+efp_params_file params.efp
+enable_cutoff false
+swf_cutoff 10
+xr_cutoff 0
+max_steps 200
+multistep_steps 1
+fraglib_path ../fraglib
+userlib_path .
+enable_pbc false
+periodic_box 30.0 30.0 30.0 90.0 90.0 90.0
+opt_tol 0.0001
+gtest_tol 1e-06
+ref_energy 0
+hess_central false
+num_step_dist 0.001
+num_step_angle 0.01
+ensemble nve
+time_step 1
+print_step 1
+velocitize false
+temperature 300
+pressure 1
+thermostat_tau 1000
+barostat_tau 10000
+ligand -100
+enable_pairwise false
+print_pbc false
+symmetry false
+special_fragment 0
+enable_torch false
+opt_special_frag 0
+torch_nn ani2.pt
+symm_frag frag
+update_params 0
+update_params_cutoff 0
+print 0
+
+
+marker for coming inside state_init
+
+xr_cutoff is set to 10.000000 
+
+ENERGY MINIMIZATION JOB
+
+
+Inside opt_set_func
+marker call for entry in compute_efp
+    INITIAL STATE
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.000000     0.063030     0.000000
+A02H2               -0.752652    -0.500166     0.000000
+A03H3                0.752652    -0.500166     0.000000
+A01O1                5.047701    -0.041199     0.000000
+A02H2                5.113439     0.896539     0.000000
+A03H3                4.129507    -0.242679     0.000000
+A01N1                0.000000     5.000000    -0.063177
+A02H2                0.929426     4.912005     0.292603
+A03H3               -0.540919     4.239091     0.292603
+A04H4               -0.388507     5.848904     0.292603
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+   0.000000e+00   0.000000e+00   0.000000e+00   0.000000e+00   0.000000e+00   0.000000e+00
+
+fragment H2O_L
+   5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
+
+fragment NH3_L
+   0.000000e+00   5.000000e+00   0.000000e+00   2.000000e+00   0.000000e+00   0.000000e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY     0.0001397059
+           POLARIZATION ENERGY    -0.0000429508
+             DISPERSION ENERGY    -0.0001897219
+     EXCHANGE REPULSION ENERGY     0.0000079576
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0000850092
+
+
+                 ENERGY CHANGE     0.0000000000
+                  RMS GRADIENT     0.0007881033
+              MAXIMUM GRADIENT     0.0020014240
+
+
+marker call for entry in compute_efp
+    STATE AFTER 1 STEPS
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.017477     0.000389     0.035633
+A02H2               -0.781410     0.495798     0.030564
+A03H3               -0.228326    -0.900319    -0.073823
+A01O1                5.052237    -0.011050    -0.003343
+A02H2                5.584488     0.763248    -0.032458
+A03H3                4.159922     0.278019    -0.065699
+A01N1                0.019717     4.981036    -0.082589
+A02H2                0.854097     5.134817     0.444970
+A03H3               -0.306520     4.057918     0.116357
+A04H4               -0.671305     5.628742     0.235407
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+  -4.098140e-02  -2.229022e-02   2.922447e-02  -5.985765e-01   1.233840e-01  -5.985765e-01
+
+fragment H2O_L
+   5.032089e+00   4.845369e-02  -8.461348e-03  -2.548693e+00   8.425665e-02  -2.655079e-01
+
+fragment NH3_L
+   8.892306e-03   4.973837e+00  -2.076313e-02  -9.838895e-01   2.072561e-01  -2.983890e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY    -0.0010979706
+           POLARIZATION ENERGY    -0.0000321984
+             DISPERSION ENERGY    -0.0001853498
+     EXCHANGE REPULSION ENERGY     0.0000065806
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0013089382
+
+
+                 ENERGY CHANGE    -0.0012239290
+                  RMS GRADIENT     0.0005747173
+              MAXIMUM GRADIENT     0.0012953122
+
+
+marker call for entry in compute_efp
+    STATE AFTER 2 STEPS
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.029483     0.031505     0.030178
+A02H2               -0.901506     0.158646     0.002443
+A03H3                0.173822    -0.892693    -0.063095
+A01O1                5.034770    -0.017321    -0.003145
+A02H2                5.331961     0.873790    -0.038819
+A03H3                4.096578     0.013812    -0.053148
+A01N1                0.023843     4.984525    -0.077848
+A02H2                0.870576     5.186637     0.412407
+A03H3               -0.257635     4.055994     0.160387
+A04H4               -0.680088     5.614411     0.247546
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+  -1.453585e-02  -1.309636e-02   2.340648e-02  -3.914264e-01   1.161781e-01  -3.850408e-01
+
+fragment H2O_L
+   4.998901e+00   3.428529e-02  -7.939698e-03  -2.409343e+00   7.673101e-02  -1.244932e-01
+
+fragment NH3_L
+   1.563461e-02   4.978811e+00  -1.546678e-02  -9.626886e-01   1.589742e-01  -2.965428e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY    -0.0014745516
+           POLARIZATION ENERGY    -0.0000293599
+             DISPERSION ENERGY    -0.0001902597
+     EXCHANGE REPULSION ENERGY     0.0000071215
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0016870497
+
+
+                 ENERGY CHANGE    -0.0003781115
+                  RMS GRADIENT     0.0002813711
+              MAXIMUM GRADIENT     0.0005601580
+
+
+marker call for entry in compute_efp
+    STATE AFTER 3 STEPS
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.052354     0.030122     0.033973
+A02H2               -0.872909     0.193381     0.003803
+A03H3                0.161738    -0.897122    -0.075249
+A01O1                5.000984    -0.011053    -0.003877
+A02H2                5.344564     0.863194    -0.040185
+A03H3                4.065955     0.068990    -0.058548
+A01N1                0.033826     4.977122    -0.079445
+A02H2                0.835431     5.295127     0.424993
+A03H3               -0.119442     4.018262     0.155617
+A04H4               -0.756650     5.502437     0.232561
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+   6.699543e-03  -1.262897e-02   2.617295e-02  -4.136127e-01   1.348408e-01  -4.013313e-01
+
+fragment H2O_L
+   4.967888e+00   4.234630e-02  -8.967826e-03  -2.436363e+00   8.177760e-02  -1.498995e-01
+
+fragment NH3_L
+   2.541267e-02   4.970283e+00  -1.720512e-02  -8.882652e-01   1.724703e-01  -2.898945e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY    -0.0016153396
+           POLARIZATION ENERGY    -0.0000330365
+             DISPERSION ENERGY    -0.0001972092
+     EXCHANGE REPULSION ENERGY     0.0000087943
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0018367910
+
+
+                 ENERGY CHANGE    -0.0001497413
+                  RMS GRADIENT     0.0002494753
+              MAXIMUM GRADIENT     0.0005215316
+
+
+marker call for entry in compute_efp
+    STATE AFTER 4 STEPS
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.513028     0.066949     0.089141
+A02H2               -0.357748     0.411529     0.007358
+A03H3                0.485746    -0.807247    -0.255404
+A01O1                4.310124     0.117627    -0.016158
+A02H2                5.142544     0.554105    -0.031570
+A03H3                3.657461     0.787960    -0.107582
+A01N1                0.205219     4.804682    -0.101346
+A02H2               -0.634724     4.755765     0.437412
+A03H3                0.845242     5.404441     0.377001
+A04H4                0.604894     3.889659    -0.135248
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+   4.627751e-01   3.731318e-02   6.528498e-02  -5.684361e-01   4.299262e-01  -4.321236e-01
+
+fragment H2O_L
+   4.320182e+00   1.795611e-01  -2.213648e-02  -2.810963e+00   1.076601e-01  -4.892210e-01
+
+fragment NH3_L
+   2.170425e-01   4.783126e+00  -4.314850e-02   5.016962e-01   3.997211e-01  -1.666945e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY    -0.0019970424
+           POLARIZATION ENERGY    -0.0001133201
+             DISPERSION ENERGY    -0.0005189804
+     EXCHANGE REPULSION ENERGY     0.0001370571
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0024922857
+
+
+                 ENERGY CHANGE    -0.0006554947
+                  RMS GRADIENT     0.0016773523
+              MAXIMUM GRADIENT     0.0037045428
+
+
+marker call for entry in compute_efp
+    STATE AFTER 5 STEPS
+
+Inside print_geometry
+    GEOMETRY (ANGSTROMS)
+
+A01O1                0.601785     0.104143     0.096456
+A02H2               -0.316800     0.239478    -0.050381
+A03H3                0.803525    -0.745677    -0.251081
+A01O1                4.188285     0.119029    -0.018674
+A02H2                4.919424     0.709534    -0.039046
+A03H3                3.416063     0.650608    -0.087757
+A01N1                0.235251     4.772132    -0.103174
+A02H2               -0.522724     4.321553     0.366516
+A03H3                0.516604     5.557747     0.446193
+A04H4                1.000620     4.131107    -0.141306
+
+
+Inside print_restart
+    RESTART DATA
+
+fragment H2O_L
+   5.616718e-01   6.416184e-02   6.879184e-02  -4.576364e-01   4.765362e-01  -2.949195e-01
+
+fragment H2O_L
+   4.185986e+00   1.818183e-01  -2.367984e-02  -2.716784e+00   8.586290e-02  -3.869211e-01
+
+fragment NH3_L
+   2.523420e-01   4.754020e+00  -4.511200e-02   7.564173e-01   4.051682e-01  -1.445461e+00
+
+
+Inside print_energy
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY    -0.0035736894
+           POLARIZATION ENERGY    -0.0001715643
+             DISPERSION ENERGY    -0.0007063063
+     EXCHANGE REPULSION ENERGY     0.0003167427
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+
+                  TOTAL ENERGY    -0.0041348172
+
+
+                 ENERGY CHANGE    -0.0016425315
+                  RMS GRADIENT     0.0010976895
+              MAXIMUM GRADIENT     0.0021002448
+
+
+marker call for entry in compute_efp

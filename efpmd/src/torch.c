@@ -91,7 +91,7 @@ void torch_get_coord(struct torch *torch, double *coords) {
 }
 
 void torch_set_coord(struct torch *torch, const double *coords) {
-    printf("marker for coming inside torch_set_coord\n");
+    //printf("marker for coming inside torch_set_coord\n");
     memcpy(torch->atom_coords, coords, (3 * torch->natoms) * sizeof(double));
 }
 
@@ -104,7 +104,7 @@ void torch_set_atom_species(struct torch *torch, size_t atom, int *atom_z) {
 void torch_compute(struct torch *torch, int model_type) {
 
     // prepare data arrays 
-    msg("SINGLE FRAGMENT TORCH JOB\n-------------------------\n");
+    msg("\nSINGLE FRAGMENT TORCH JOB\n-------------------------\n");
     struct state *state;
     size_t n_atoms = torch->natoms;
     float frag_coordinates[n_atoms][3];

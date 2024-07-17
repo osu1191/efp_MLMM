@@ -31,6 +31,7 @@
 /* current coordinates from efp struct are used */
 void compute_energy(struct state *state, bool do_grad)
 {
+	if (cfg_get_int(state->cfg, "print") == 5) printf("marker for entry in to compute_energy\n");
 	struct efp_atom *atoms;
 	struct efp_energy efp_energy;
 	double xyz[3], xyzabc[6], *grad;
@@ -80,9 +81,9 @@ void compute_energy(struct state *state, bool do_grad)
     if (cfg_get_bool(state->cfg, "enable_torch")) {
         // prototype to compute energy and gradients with torch
         // torch_compute_energy(struct torch *, bool do_grad);
-
+	if (cfg_get_int(state->cfg, "print") == 5) printf("marker for enable_torch block in compute_energy\n");
 	int torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
-        printf("torch_model_type %d\n",torch_model_type);
+        if (cfg_get_int(state->cfg, "print") == 5) printf("torch_model_type %d\n",torch_model_type);
 
         torch_compute(state->torch, torch_model_type);
         state->torch_energy = torch_get_energy(state->torch);
