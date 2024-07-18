@@ -171,6 +171,7 @@ void opt_set_bound(struct opt_state *state, size_t n, const int *nbd,
 
 enum opt_result opt_step(struct opt_state *state)
 {
+	// this is where the compute_efp gets evoked again and again
 	printf("marker for calling opt_step\n");
 	assert(state);
 
@@ -179,7 +180,13 @@ next:
 
 	printf("state->task: %s\n", state->task);
         printf("strlen(\"FG\"): %lu\n", strlen("FG"));
-
+	// func = compute_efp(...)
+	// state->f = state->func copies the function compute_efp
+	// and send it to setulb_ function via the call_routine funtion 
+	// the result is a string variable FG or NEW_X based on 
+	// which we go out of this function
+	// print statements have been added to check the strings
+	
 	if (strncmp(state->task, "FG", strlen("FG")) == 0) {
 		state->f = state->func(state->n, state->x, state->g, state->data);
 		// when this if block is traversed compute_efp is evoked

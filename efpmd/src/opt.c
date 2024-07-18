@@ -51,6 +51,11 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
         switch(cfg_get_int(state->cfg, "opt_special_frag")) {
             // optimize only special fragment atoms
             case 0:
+		// every time this block is reached, the counter variable is incremented
+		// and we print the value of the counter variable below
+		// state->init is to omit the printing of the Initial step,
+		// which does not show this issue
+
 		state->counter++;
 		state->init++;
 		if(state->init > 1) printf("counter for no. of times compute_efp, case-0 is traversed at 1-time %4d\n",state->counter);
@@ -66,9 +71,6 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
                 // compute EFP and torch energies and gradients
                 compute_energy(state, true);
 		if (cfg_get_int(state->cfg, "verbose") == 5) printf("Finished running 'compute_energy()' which traverses through torch routines\n");
-		// after this line its goin to the top of the routine again for some reason
-		// thats why update_special_fragment is occuring multiple times for the same step
-		// WHY??
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTorch gradient\n");
                     for (size_t i = 0; i < n; i++) {
@@ -78,7 +80,7 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
 
                 // combine EFP and torch (atomic) gradients on special fragments
 	        // commenting this for now... trying to optimizing 1 fragment only with torch gradients	
-                //check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
+                // check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
 
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTotal torch + EFP gradient\n");
@@ -356,14 +358,18 @@ void static opt_spec_frag_only(struct state *state)
     msg("\n    INITIAL STATE\n\n");
     print_status(state, 0.0, rms_grad, max_grad);
     if (cfg_get_int(state->cfg, "verbose") == 5) printf("We should be entering the loop of optimization\n");
-    // some how compute_efp is evoked here....... 
-    // Its happening more than 1 time before entering the following loop....
  
     for (int step = 1; step <= cfg_get_int(state->cfg, "max_steps"); step++) {
 	if (cfg_get_int(state->cfg, "verbose") == 5) printf("Inside the optimization loop... this is step %4d\n",step);
 	state->counter = 0;
         if (opt_step(opt_state))
             error("unable to make an optimization step");
+
+	// some how compute_efp is evoked here.......
+	// Its happening more than 1 time before entering the following loop....
+	// the counter variable is been added to see how many times the compute_efp
+	// routine is being evoked during 1 step of the opt-cycle.
+
         double e_new = opt_get_fx(opt_state);
         opt_get_gx(opt_state, n_coord, grad);
         get_grad_info(n_coord, grad, &rms_grad, &max_grad);
@@ -380,7 +386,6 @@ void static opt_spec_frag_only(struct state *state)
 
         e_old = e_new;
     }
-    // some how compute_efp is evoked here....... WHY??
     opt_shutdown(opt_state);
 
     msg("SPECIAL FRAGMENT ENERGY MINIMIZATION JOB COMPLETED SUCCESSFULLY\n");
