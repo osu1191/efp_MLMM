@@ -14,7 +14,7 @@ Journal References:
 Project web site: https://github.com/libefp2/libefp/
 
 RUNNING 1 MPI PROCESSES WITH 1 OPENMP THREADS EACH
-WALL CLOCK TIME IS Wed Jul 17 19:31:25 2024
+WALL CLOCK TIME IS Wed Jul 17 19:40:47 2024
 
 SIMULATION SETTINGS
 
@@ -83,7 +83,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     INITIAL STATE
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.693900    -0.705300     0.203100
@@ -100,7 +99,6 @@ A02H2               -5.481723    -4.842535    -0.369036
 A03H3               -4.691889    -3.717879     0.245170
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -116,7 +114,6 @@ fragment H2O_L
   -5.474627e+00  -4.169368e+00   2.338286e-01   5.110389e-01   8.015559e-01   6.039968e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0111379933
@@ -150,7 +147,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 1 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.614562    -0.694911     0.228654
@@ -167,7 +163,6 @@ A02H2               -5.391649    -4.762530    -0.357295
 A03H3               -4.707016    -3.569148     0.253487
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -183,7 +178,6 @@ fragment H2O_L
   -5.464560e+00  -4.059568e+00   2.058920e-01   5.138097e-01   7.154650e-01   6.669038e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0148491770
@@ -217,7 +211,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 2 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.567060    -0.712667     0.233650
@@ -234,7 +227,6 @@ A02H2               -5.595668    -4.697564    -0.327117
 A03H3               -4.541971    -3.745617     0.172340
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -250,7 +242,6 @@ fragment H2O_L
   -5.412657e+00  -3.986106e+00   1.991771e-01   3.047078e-01   7.008369e-01   5.404596e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0182033217
@@ -284,7 +275,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 3 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.388627    -0.802025     0.245420
@@ -301,7 +291,6 @@ A02H2               -5.814648    -4.261065    -0.268305
 A03H3               -4.387590    -3.923199     0.071238
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -317,7 +306,6 @@ fragment H2O_L
   -5.258972e+00  -3.715117e+00   1.897510e-01  -6.573662e-02   6.673967e-01   3.730262e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0237636470
@@ -351,7 +339,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 4 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.361222    -0.778803     0.242433
@@ -368,7 +355,6 @@ A02H2               -5.600165    -4.369507    -0.311516
 A03H3               -4.361547    -3.657843     0.163141
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -384,7 +370,6 @@ fragment H2O_L
   -5.263848e+00  -3.698705e+00   1.920377e-01   8.589622e-02   6.670400e-01   5.348178e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0273018923
@@ -418,7 +403,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 5 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.265482    -0.774142     0.235115
@@ -435,7 +419,6 @@ A02H2               -5.242843    -4.314042    -0.351084
 A03H3               -4.378288    -3.267539     0.299543
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -451,7 +434,6 @@ fragment H2O_L
   -5.212499e+00  -3.601657e+00   2.041068e-01   2.499810e-01   6.827289e-01   7.547073e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0335615812
@@ -491,7 +473,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 6 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.126449    -0.769393     0.229639
@@ -508,7 +489,6 @@ A02H2               -4.994010    -4.129251    -0.367795
 A03H3               -4.342396    -3.003656     0.390080
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -524,7 +504,6 @@ fragment H2O_L
   -5.109963e+00  -3.446376e+00   2.126249e-01   2.834807e-01   7.007496e-01   8.959887e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0442389580
@@ -564,7 +543,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 7 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.080746    -0.735578     0.218736
@@ -581,7 +559,6 @@ A02H2               -4.878269    -4.054998    -0.389792
 A03H3               -4.321880    -2.935100     0.448181
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -597,7 +574,6 @@ fragment H2O_L
   -5.053267e+00  -3.417108e+00   2.259369e-01   3.068549e-01   7.499898e-01   9.556502e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0478025984
@@ -631,7 +607,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 8 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.086908    -0.719863     0.217130
@@ -648,7 +623,6 @@ A02H2               -5.021475    -4.059216    -0.410939
 A03H3               -4.230216    -3.074498     0.407706
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -664,7 +638,6 @@ fragment H2O_L
   -5.045259e+00  -3.421429e+00   2.288370e-01   2.023987e-01   7.934545e-01   8.679164e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0491277697
@@ -698,7 +671,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 9 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.094665    -0.710294     0.217622
@@ -715,7 +687,6 @@ A02H2               -5.081880    -4.057157    -0.416733
 A03H3               -4.203288    -3.130108     0.379882
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -731,7 +702,6 @@ fragment H2O_L
   -5.044093e+00  -3.423784e+00   2.267435e-01   1.701810e-01   8.057334e-01   8.236680e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0492295244
@@ -765,7 +735,6 @@ marker for calling in opt_get_fx
 marker for calling in opt_get_gx
     STATE AFTER 10 STEPS
 
-Inside print_geometry
     GEOMETRY (ANGSTROMS)
 
 A01O1               -6.101893    -0.694072     0.217848
@@ -782,7 +751,6 @@ A02H2               -5.106599    -4.060486    -0.422239
 A03H3               -4.194906    -3.156505     0.363620
 
 
-Inside print_restart
     RESTART DATA
 
 fragment H2O_L
@@ -798,7 +766,6 @@ fragment H2O_L
   -5.044176e+00  -3.432102e+00   2.242034e-01   1.660503e-01   8.148673e-01   8.001715e-01
 
 
-Inside print_energy
     ENERGY COMPONENTS (ATOMIC UNITS)
 
           ELECTROSTATIC ENERGY    -0.0482698670
@@ -817,5 +784,5 @@ Inside print_energy
 
 
 ENERGY MINIMIZATION JOB COMPLETED SUCCESSFULLY
-WALL CLOCK TIME IS Wed Jul 17 19:31:25 2024
+WALL CLOCK TIME IS Wed Jul 17 19:40:47 2024
 TOTAL RUN TIME IS 0 SECONDS

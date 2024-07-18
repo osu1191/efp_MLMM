@@ -28,7 +28,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdio.h>
 #include "opt.h"
 
 struct opt_state {
@@ -177,6 +177,9 @@ enum opt_result opt_step(struct opt_state *state)
 next:
 	call_routine(state);
 
+	printf("state->task: %s\n", state->task);
+        printf("strlen(\"FG\"): %lu\n", strlen("FG"));
+
 	if (strncmp(state->task, "FG", strlen("FG")) == 0) {
 		state->f = state->func(state->n, state->x, state->g, state->data);
 		// when this if block is traversed compute_efp is evoked
@@ -187,6 +190,9 @@ next:
 		goto next;
 	}
 
+	printf("state->task: %s\n", state->task);
+        printf("strlen(\"NEW_X\"): %lu\n", strlen("NEW_X"));
+ 
 	if (strncmp(state->task, "NEW_X", strlen("NEW_X")) == 0){
 		// when this if-block is satisfied compute_efp is not evoked anymore
 		// src/opt-routine goes to next step

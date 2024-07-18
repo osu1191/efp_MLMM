@@ -175,7 +175,7 @@ static struct cfg *make_cfg(void)
     cfg_add_double(cfg, "update_params_cutoff", 0.0);
 
     cfg_add_int(cfg, "print", 0);
-
+    cfg_add_int(cfg, "verbose", 0);
     return cfg;
 }
 
@@ -337,7 +337,8 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
         .symm_frag = cfg_get_enum(cfg, "symm_frag"),
         .update_params = cfg_get_int(cfg, "update_params"),
         .update_params_cutoff = cfg_get_double(cfg, "update_params_cutoff"),
-        .print = cfg_get_int(cfg, "print")
+        .print = cfg_get_int(cfg, "print"),
+	//.verbose = cfg_get_int(cfg, "verbose")
 	};
 
 	if (opts.xr_cutoff == 0.0) {
@@ -411,7 +412,7 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 
 static void state_init(struct state *state, const struct cfg *cfg, const struct sys *sys)
 {
-	if (cfg_get_int(state->cfg, "print") == 5) printf("marker for coming inside state_init\n\n");
+	if (cfg_get_int(state->cfg, "verbose") == 5) printf("marker for coming inside state_init\n\n");
 	size_t ntotal, ifrag, nfrag, natom, spec_frag, n_special_atoms, iatom;
 
 	state->efp = create_efp(cfg, sys);

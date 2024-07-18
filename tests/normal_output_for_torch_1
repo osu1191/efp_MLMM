@@ -1,3 +1,4 @@
+chosen nn_type: ani1.pt
 EFPMD ver. 1.8.0
 Copyright (c) 2012-2017 Ilya Kaliman
 
@@ -14,7 +15,7 @@ Journal References:
 Project web site: https://github.com/libefp2/libefp/
 
 RUNNING 1 MPI PROCESSES WITH 1 OPENMP THREADS EACH
-WALL CLOCK TIME IS Mon Jul 15 04:02:32 2024
+WALL CLOCK TIME IS Wed Jul 17 19:39:11 2024
 
 SIMULATION SETTINGS
 
@@ -35,7 +36,7 @@ efp_params_file params.efp
 enable_cutoff false
 swf_cutoff 10
 xr_cutoff 0
-max_steps 100
+max_steps 200
 multistep_steps 1
 fraglib_path ../fraglib
 userlib_path .
@@ -62,26 +63,22 @@ symmetry false
 special_fragment 0
 enable_torch true
 opt_special_frag 0
-torch_nn ani.pt
+torch_nn ani1.pt
 symm_frag frag
 update_params 0
 update_params_cutoff 0
 print 0
+verbose 0
 
-
-marker for coming inside state_init
 
 xr_cutoff is set to 10.000000 
 
-marker for coming inside torch_set_coord
 SPECIAL FRAGMENT ENERGY MINIMIZATION JOB
 
 
+Inside opt_set_func
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -113,7 +110,9 @@ Special fragment Atomic Energies:
 
  Torch energy -76.387024 
 
-Finished running 'compute_energy()' which traverses through torch routines
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
+
     INITIAL STATE
 
     GEOMETRY (ANGSTROMS)
@@ -155,17 +154,19 @@ fragment NH3_L
 
 
                  ENERGY CHANGE     0.0000000000
-                  RMS GRADIENT     0.0355005413
+                  RMS GRADIENT     0.0355005405
               MAXIMUM GRADIENT     0.0748926401
 
 
-We should be entering the loop of optimization
-Inside the optimization loop... this is step    1
+chosen nn_type: ani1.pt
+chosen nn_type: ani1.pt
+chosen nn_type: ani1.pt
+marker for calling opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    1
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -182,7 +183,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0          0.000000          0.435151         0.000000
+   0         -0.000000          0.435151         0.000000
    0         -0.942807         -0.686226         0.000000
    0          0.942807         -0.686226         0.000000
 -----------------------------------------------------------
@@ -197,12 +198,14 @@ Special fragment Atomic Energies:
 
  Torch energy -76.212234 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    2
+This should not have happened!!! This is where 'compute_efp' has been evoked
+ more than once for a particular optimization step
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -219,7 +222,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0          0.000000          0.128441         0.000000
+   0         -0.000000          0.128441         0.000000
    0         -0.786077         -0.532871         0.000000
    0          0.786077         -0.532871         0.000000
 -----------------------------------------------------------
@@ -234,12 +237,14 @@ Special fragment Atomic Energies:
 
  Torch energy -76.382141 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    3
+This should not have happened!!! This is where 'compute_efp' has been evoked
+ more than once for a particular optimization step
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -256,7 +261,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0          0.000000          0.090211         0.000000
+   0         -0.000000          0.090211         0.000000
    0         -0.766541         -0.513756         0.000000
    0          0.766541         -0.513756         0.000000
 -----------------------------------------------------------
@@ -271,12 +276,19 @@ Special fragment Atomic Energies:
 
  Torch energy -76.388351 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("FG"): 2
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("NEW_X"): 5
+second (NEW_X) if block in opt_step
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
     STATE AFTER 1 STEPS
 
     GEOMETRY (ANGSTROMS)
 
-A01O1                0.000000     0.090211     0.000000
+A01O1               -0.000000     0.090211     0.000000
 A02H2               -0.766541    -0.513756     0.000000
 A03H3                0.766541    -0.513756     0.000000
 A01O1                5.047701    -0.041199     0.000000
@@ -291,7 +303,7 @@ A04H4               -0.388507     5.848904     0.292603
     RESTART DATA
 
 fragment H2O_L
-   0.000000e+00   2.261806e-02   0.000000e+00   2.492607e-02   0.000000e+00   0.000000e+00
+  -3.001794e-10   2.261806e-02   0.000000e+00   2.492606e-02   0.000000e+00   0.000000e+00
 
 fragment H2O_L
    5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
@@ -313,16 +325,17 @@ fragment NH3_L
 
 
                  ENERGY CHANGE    -0.0013701828
-                  RMS GRADIENT     0.0111733743
-              MAXIMUM GRADIENT     0.0202107504
+                  RMS GRADIENT     0.0111733750
+              MAXIMUM GRADIENT     0.0202107467
 
 
-Inside the optimization loop... this is step    2
+chosen nn_type: ani1.pt
+marker for calling opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    1
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -339,7 +352,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0          0.000000          0.084466         0.000000
+   0         -0.000000          0.084466         0.000000
    0         -0.762409         -0.510884         0.000000
    0          0.762409         -0.510884         0.000000
 -----------------------------------------------------------
@@ -347,19 +360,26 @@ Special fragment Atomic Energies:
  Special fragment atom gradients 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   1          0.000000         -0.000100         0.000000
+   1         -0.000000         -0.000100         0.000000
    2         -0.003931          0.000050         0.000000
    3          0.003931          0.000050         0.000000
 ------------------------------------------------------------
 
  Torch energy -76.388519 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("FG"): 2
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("NEW_X"): 5
+second (NEW_X) if block in opt_step
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
     STATE AFTER 2 STEPS
 
     GEOMETRY (ANGSTROMS)
 
-A01O1                0.000000     0.084466     0.000000
+A01O1               -0.000000     0.084466     0.000000
 A02H2               -0.762409    -0.510884     0.000000
 A03H3                0.762409    -0.510884     0.000000
 A01O1                5.047701    -0.041199     0.000000
@@ -374,7 +394,7 @@ A04H4               -0.388507     5.848904     0.292603
     RESTART DATA
 
 fragment H2O_L
-   0.000000e+00   1.783720e-02   0.000000e+00   2.057205e-02   0.000000e+00   0.000000e+00
+  -2.839610e-10   1.783719e-02   0.000000e+00   2.057205e-02   0.000000e+00   0.000000e+00
 
 fragment H2O_L
    5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
@@ -396,16 +416,17 @@ fragment NH3_L
 
 
                  ENERGY CHANGE    -0.0001609423
-                  RMS GRADIENT     0.0018534012
-              MAXIMUM GRADIENT     0.0039307065
+                  RMS GRADIENT     0.0018533736
+              MAXIMUM GRADIENT     0.0039306469
 
 
-Inside the optimization loop... this is step    3
+chosen nn_type: ani1.pt
+marker for calling opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    1
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -422,7 +443,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0         -0.000000          0.084467         0.000000
+   0          0.000000          0.084467         0.000000
    0         -0.761095         -0.510885         0.000000
    0          0.761095         -0.510885         0.000000
 -----------------------------------------------------------
@@ -430,19 +451,26 @@ Special fragment Atomic Energies:
  Special fragment atom gradients 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   1          0.000000         -0.001984         0.000000
+   1         -0.000000         -0.001984         0.000000
    2         -0.001857          0.000992         0.000000
    3          0.001857          0.000992         0.000000
 ------------------------------------------------------------
 
  Torch energy -76.388527 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("FG"): 2
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("NEW_X"): 5
+second (NEW_X) if block in opt_step
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
     STATE AFTER 3 STEPS
 
     GEOMETRY (ANGSTROMS)
 
-A01O1               -0.000000     0.084467     0.000000
+A01O1                0.000000     0.084467     0.000000
 A02H2               -0.761095    -0.510885     0.000000
 A03H3                0.761095    -0.510885     0.000000
 A01O1                5.047701    -0.041199     0.000000
@@ -457,7 +485,7 @@ A04H4               -0.388507     5.848904     0.292603
     RESTART DATA
 
 fragment H2O_L
-  -1.044143e-09   1.783864e-02   0.000000e+00   2.141127e-02   0.000000e+00   0.000000e+00
+   7.615551e-10   1.783864e-02   0.000000e+00   2.141127e-02   0.000000e+00   0.000000e+00
 
 fragment H2O_L
    5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
@@ -479,16 +507,17 @@ fragment NH3_L
 
 
                  ENERGY CHANGE    -0.0000099695
-                  RMS GRADIENT     0.0011926954
-              MAXIMUM GRADIENT     0.0019836742
+                  RMS GRADIENT     0.0011926987
+              MAXIMUM GRADIENT     0.0019836826
 
 
-Inside the optimization loop... this is step    4
+chosen nn_type: ani1.pt
+marker for calling opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    1
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -505,8 +534,8 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0         -0.000000          0.085599         0.000000
-   0         -0.759145         -0.511450         0.000000
+   0          0.000000          0.085599         0.000000
+   0         -0.759145         -0.511451         0.000000
    0          0.759145         -0.511451         0.000000
 -----------------------------------------------------------
 
@@ -520,13 +549,20 @@ Special fragment Atomic Energies:
 
  Torch energy -76.388535 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("FG"): 2
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("NEW_X"): 5
+second (NEW_X) if block in opt_step
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
     STATE AFTER 4 STEPS
 
     GEOMETRY (ANGSTROMS)
 
-A01O1               -0.000000     0.085599     0.000000
-A02H2               -0.759145    -0.511450     0.000000
+A01O1                0.000000     0.085599     0.000000
+A02H2               -0.759145    -0.511451     0.000000
 A03H3                0.759145    -0.511451     0.000000
 A01O1                5.047701    -0.041199     0.000000
 A02H2                5.113439     0.896539     0.000000
@@ -540,7 +576,7 @@ A04H4               -0.388507     5.848904     0.292603
     RESTART DATA
 
 fragment H2O_L
-  -3.576676e-09   1.878035e-02   0.000000e+00   2.403960e-02   0.000000e+00   0.000000e+00
+   2.143524e-09   1.878039e-02   0.000000e+00   2.403967e-02   0.000000e+00   0.000000e+00
 
 fragment H2O_L
    5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
@@ -551,27 +587,28 @@ fragment NH3_L
 
     ENERGY COMPONENTS (ATOMIC UNITS)
 
-          ELECTROSTATIC ENERGY     0.0001006477
+          ELECTROSTATIC ENERGY     0.0001006475
            POLARIZATION ENERGY    -0.0000463494
              DISPERSION ENERGY    -0.0001922304
      EXCHANGE REPULSION ENERGY     0.0000085540
           POINT CHARGES ENERGY     0.0000000000
      CHARGE PENETRATION ENERGY     0.0000000000
 
-                  TOTAL ENERGY   -76.3886639239
+                  TOTAL ENERGY   -76.3886639241
 
 
-                 ENERGY CHANGE    -0.0000138943
-                  RMS GRADIENT     0.0007131921
-              MAXIMUM GRADIENT     0.0017458275
+                 ENERGY CHANGE    -0.0000138945
+                  RMS GRADIENT     0.0007131621
+              MAXIMUM GRADIENT     0.0017457549
 
 
-Inside the optimization loop... this is step    5
+chosen nn_type: ani1.pt
+marker for calling opt_step
+state->task: FG_LNSRCH                                                   ÿÿÿÿFG                                                          
+strlen("FG"): 2
 marker call for entry in compute_efp
-We are running case-0
-We just updated the special fragment
-marker for coming inside torch_set_coord
-We are setting the new coordinates from updated fragment
+counter for no. of times compute_efp, case-0 is traversed at 1-time    1
+
 SINGLE FRAGMENT TORCH JOB
 -------------------------
 
@@ -588,7 +625,7 @@ Special fragment Atomic Energies:
  Special fragment coordinates (Angstroms) 
 -----------------------------------------------------------
   Atom            X                 Y                Z
-   0         -0.000000          0.086639         0.000000
+   0          0.000000          0.086639         0.000000
    0         -0.758367         -0.511970         0.000000
    0          0.758367         -0.511970         0.000000
 -----------------------------------------------------------
@@ -603,12 +640,19 @@ Special fragment Atomic Energies:
 
  Torch energy -76.388535 
 
-Finished running 'compute_energy()' which traverses through torch routines
+first (FG) if block in opt_step
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("FG"): 2
+state->task: NEW_X                                                       ÿÿÿÿCONVERGENCE                                                 
+strlen("NEW_X"): 5
+second (NEW_X) if block in opt_step
+marker for calling in opt_get_fx
+marker for calling in opt_get_gx
     FINAL STATE
 
     GEOMETRY (ANGSTROMS)
 
-A01O1               -0.000000     0.086639     0.000000
+A01O1                0.000000     0.086639     0.000000
 A02H2               -0.758367    -0.511970     0.000000
 A03H3                0.758367    -0.511970     0.000000
 A01O1                5.047701    -0.041199     0.000000
@@ -623,7 +667,7 @@ A04H4               -0.388507     5.848904     0.292603
     RESTART DATA
 
 fragment H2O_L
-  -2.767160e-09   1.964570e-02   0.000000e+00   2.580632e-02   0.000000e+00   0.000000e+00
+   2.174388e-09   1.964568e-02   0.000000e+00   2.580626e-02   0.000000e+00   0.000000e+00
 
 fragment H2O_L
    5.000000e+00   0.000000e+00   0.000000e+00  -2.283185e+00   0.000000e+00   0.000000e+00
@@ -634,22 +678,22 @@ fragment NH3_L
 
     ENERGY COMPONENTS (ATOMIC UNITS)
 
-          ELECTROSTATIC ENERGY     0.0000969052
+          ELECTROSTATIC ENERGY     0.0000969053
            POLARIZATION ENERGY    -0.0000464797
              DISPERSION ENERGY    -0.0001923500
      EXCHANGE REPULSION ENERGY     0.0000085895
           POINT CHARGES ENERGY     0.0000000000
      CHARGE PENETRATION ENERGY     0.0000000000
 
-                  TOTAL ENERGY   -76.3886678809
+                  TOTAL ENERGY   -76.3886678808
 
 
-                 ENERGY CHANGE    -0.0000039570
-                  RMS GRADIENT     0.0000332152
-              MAXIMUM GRADIENT     0.0000601206
+                 ENERGY CHANGE    -0.0000039567
+                  RMS GRADIENT     0.0000332071
+              MAXIMUM GRADIENT     0.0000601094
 
 
 OPTIMIZATION CONVERGED
 SPECIAL FRAGMENT ENERGY MINIMIZATION JOB COMPLETED SUCCESSFULLY
-WALL CLOCK TIME IS Mon Jul 15 04:02:35 2024
-TOTAL RUN TIME IS 3 SECONDS
+WALL CLOCK TIME IS Wed Jul 17 19:39:15 2024
+TOTAL RUN TIME IS 4 SECONDS
