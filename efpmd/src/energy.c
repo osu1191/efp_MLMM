@@ -51,7 +51,8 @@ void compute_energy(struct state *state, bool do_grad)
 	}
 
 	state->energy = efp_energy.total;
-
+	printf("\n State energy (state->energy) %lf \n", state->energy);	
+ 
 	/* constraints */
 	for (ifrag = 0; ifrag < nfrag; ifrag++) {
 		const struct frag *frag = state->sys->frags + ifrag;

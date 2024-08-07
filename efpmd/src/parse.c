@@ -102,14 +102,18 @@ static void parse_frag(struct stream *stream, enum efp_coord_type coord_type,
             efp_stream_skip_nonspace(stream);
 
             size_t len2 = efp_stream_get_ptr(stream) - ptr2;
-            if (len2 == 0)
+            if (len2 == 0){
+//		printf("We are at line 106\n");
                 error("incorrect fragment coordinates format: reading efp atom name");
+	    }
             memcpy(atom_i.label, ptr2, len2);
 
             efp_stream_skip_space(stream);
             if (!efp_stream_parse_double(stream, &atom_i.x) || !efp_stream_parse_double(stream, &atom_i.y)
-                || !efp_stream_parse_double(stream, &atom_i.z))
+                || !efp_stream_parse_double(stream, &atom_i.z)){
+//		printf("We are at line 114\n");
                 error("incorrect fragment coordinates format: reading efp atom coordinates");
+	    }	
 
             // LVS: temporary fix not to break the code; probably need to be rewritten later on
             if (counter < 3) {
@@ -133,6 +137,7 @@ static void parse_frag(struct stream *stream, enum efp_coord_type coord_type,
         for (int i = 0, idx = 0; i < n_rows; i++) {
             for (int j = 0; j < n_cols; j++, idx++) {
                 if (!efp_stream_parse_double(stream, frag->coord + idx))
+//		    printf("We are at line 140\n");
                     error("incorrect fragment coordinates format");
             }
 

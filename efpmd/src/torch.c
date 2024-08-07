@@ -28,7 +28,7 @@
 #include "common.h"
 #include "cfg.h"
 #include <stdio.h>
-#include "../torch/c_libtorch.h"
+//#include "../torch/c_libtorch.h"
 
 struct torch {
     double energy;
@@ -95,9 +95,22 @@ void torch_set_coord(struct torch *torch, const double *coords) {
     memcpy(torch->atom_coords, coords, (3 * torch->natoms) * sizeof(double));
 }
 
-void torch_set_atom_species(struct torch *torch, size_t atom, int *atom_z) {
+//void torch_set_atom_species(struct torch *torch, size_t atom, int *atom_z) {
+//    assert(atom < torch->natoms);
+//    memcpy(torch->atom_types + atom, atom_z, sizeof(int));
+//}
+
+void torch_set_atom_species_double(struct torch *torch, size_t atom, double *atom_z) {
     assert(atom < torch->natoms);
-    memcpy(torch->atom_types + atom, atom_z, sizeof(int));
+
+    int *z_int;
+    z_int = malloc(torch->natoms*sizeof(int));
+    for (size_t i=0; i<torch->natoms; i++){
+	z_int[i] = (int) atom_z[i];
+    }
+
+    memcpy(torch->atom_types + atom, z_int, sizeof(int));
+    free(z_int); 
 }
 
 // SKP's torch version
@@ -123,14 +136,29 @@ void torch_compute(struct torch *torch, int model_type) {
     int frag_species[n_atoms];
         for (size_t i=0; i<n_atoms; i++) {
            frag_species[i] = torch->atom_types[i];
- 	//   printf("atom_types in torch_compute %4d\n",torch->atom_types[i]);
+ 	   printf("atom_types in torch_compute %4d\n",torch->atom_types[i]);
+    }
+/*
+    int frag_spec[n_atoms];
+    if (n_atoms == 3) {
+	 //frag_spec[3] = {8, 1, 1};
+	 frag_spec[0] = 8;
+	 frag_spec[1] = 1;
+	 frag_spec[2] = 1;
     }
 
-    int frag_spec[3] = {8, 1, 1};
+    if (n_atoms == 4){
+	 //frag_spec[4] = {7, 1, 1, 1};
+	 frag_spec[0] = 7;
+         frag_spec[1] = 1;
+         frag_spec[2] = 1;
+	 frag_spec[3] = 1;
+    }
+*/
     float total_energy = 0.0;
 
     // call function
-    get_torch_energy_grad((float*)frag_coordinates, frag_spec, n_atoms, energies, gradients, forces, model_type);
+    get_torch_energy_grad((float*)frag_coordinates, frag_species, n_atoms, energies, gradients, forces, model_type);
 
     // print torch data for verification
     
