@@ -15,7 +15,11 @@ project(
   VERSION ${_libefp_VERSION}
   LANGUAGES C CXX
   )
-set(CMAKE_INSTALL_PREFIX "/depot/lslipche/data/skp/torch_branch_skp/libefp")
+
+#set(CMAKE_INSTALL_PREFIX "/depot/lslipche/data/skp/torch_branch_skp/libefp")
+
+set(CMAKE_INSTALL_PREFIX "$ENV{LIBEFP_DIR}" CACHE PATH "Installation directory")
+
 set(libefp_AUTHORS "Ilya A. Kaliman, Lori A. Burns, Dmitry Morozov, Carlos H. Borca, Yen (Terri) Bui, Yongbin Kim, Lyudmila V. Slipchenko")
 set(libefp_DESCRIPTION "Parallel implementation of the Effective Fragment Potential method")
 set(libefp_URL "https://github.com/libefp2/libefp")

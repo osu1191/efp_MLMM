@@ -36,7 +36,9 @@ add_executable(
     src/torch.c
   )
  
-set(TORCH_INCLUDE_DIRS "/depot/lslipche/data/skp/libtorch/include/;/depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include")
+#set(TORCH_INCLUDE_DIRS "/depot/lslipche/data/skp/libtorch/include/;/depot/lslipche/data/skp/libtorch/include/torch/csrc/api/include")
+
+set(TORCH_INCLUDE_DIRS "$ENV{LIBTORCH_INCLUDE_DIRS}" CACHE PATH "Torch include directories")
 
 message("TORCH_INSTALL_PREFIX =  ${TORCH_INSTALL_PREFIX}")
 message("TORCH_LIBRARIES =  ${TORCH_LIBRARIES}")

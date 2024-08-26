@@ -462,6 +462,9 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 	//int torch_model_type = get_torch_type(cfg_get_string(cfg, "torch_nn"));
 	//printf("torch_model_type %d\n",torch_model_type); 	
  
+	state->torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
+	// torch_load_nn(state->torch_model_type);
+ 
         spec_frag = cfg_get_int(cfg, "special_fragment");
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
         torch_init(state->torch, n_special_atoms);

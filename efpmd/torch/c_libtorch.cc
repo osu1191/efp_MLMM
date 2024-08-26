@@ -176,6 +176,10 @@ torch::Tensor compute_gradient(const torch::Tensor& input) {
      
      return gradient;
 }     
+
+// make a separate function which decides which NNP to load and this gets called in main.c
+// following two routines has a module as an argument and just does the module.forward
+// Also try doing it with class as she suggested
                                             
 void get_ANI1_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species, float *atomic_energies, float *gradients, float *forces) {
 
@@ -234,6 +238,67 @@ void get_ANI2_energy_grad(const torch::Tensor& coordinates, const torch::Tensor&
     coordinates.grad().zero_();
  
 }
+
+// ============= Defining new class ANIModel for loading ANI1 or ANI2
+// from opt.c or main.c ======================//
+
+class ANIModel {
+public:
+    ANIModel() : module_loaded(false) {}
+
+    void load_module(int module_type) {
+        try {
+            if (module_type == 1) {
+                module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
+            } else if (module_type == 2) {
+                module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI2x_saved.pt");
+            } else {
+                throw std::invalid_argument("Invalid module_type provided.");
+            }
+            module_loaded = true;
+        } catch (const c10::Error& e) {
+            std::cerr << "Error loading the model: " << e.what() << std::endl;
+            module_loaded = false;
+        }
+    }
+
+    void get_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species,
+                         float* atomic_energies, float* gradients, float* forces) {
+        if (!module_loaded) {
+            std::cerr << "Error: Module not loaded. Call load_module() first." << std::endl;
+            return;
+        }
+
+        std::vector<torch::jit::IValue> inputs;
+        inputs.push_back(std::make_tuple(species, coordinates));
+
+        auto output = module.forward(inputs).toTuple();
+        at::Tensor energy_tensor = output->elements()[1].toTensor();
+
+        energy_tensor.backward(torch::ones_like(energy_tensor));
+
+        auto gradient = coordinates.grad();
+
+        if (!gradient.defined() || gradient.numel() == 0) {
+            std::cerr << "Error: Gradient is not defined or empty." << std::endl;
+            return;
+        }
+
+        auto force = -gradient;
+
+        auto atomic_energies_tensor = module.get_method("atomic_energies")(inputs).toTuple()->elements()[1].toTensor();
+
+        std::memcpy(atomic_energies, atomic_energies_tensor.data_ptr<float>(), atomic_energies_tensor.numel() * sizeof(float));
+        std::memcpy(gradients, gradient.data_ptr<float>(), gradient.numel() * sizeof(float));
+        std::memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
+
+        coordinates.grad().zero_();
+    }
+
+private:
+    torch::jit::Module module;
+    bool module_loaded;
+};
 
 //=============================//
  
@@ -394,6 +459,10 @@ void generateSpeciesEnergyForcesWrapper(const void* model,
 //======== SKP June 29 =================================//
 
 // previously nnp_test7_wrapper
+// this routine should have module in argument rather than model type
+// and probably get_ANI1_energy_grad and get_ANI2_energy_grad will boil down to just get_ANI_energy_grad(.., .., ..., module)
+
+// load NNP and its wrapper.. call that wrapper in opt.c/main.c...
 
 void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces, int model_type) {
 	torch::Tensor speciesTensor = torch::from_blob(const_cast<int*>(species_data), {1, num_atoms}, torch::kInt32);
@@ -410,6 +479,23 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 //        std::cout << "Gradients: " << gradients[0] << std::endl;
 //        std::cout << "Forces: " << forces[0] << std::endl; 
 }
+
+void* load_ani_model(int module_type) {
+    ANIModel* model = new ANIModel();
+    model->load_module(module_type);
+    return static_cast<void*>(model);
+}
+
+void get_ani_energy_grad(void* model_ptr, const float* coordinates, const int* species,
+                                    float* atomic_energies, float* gradients, float* forces, int num_atoms) {
+    ANIModel* model = static_cast<ANIModel*>(model_ptr);
+
+    auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
+    auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
+
+    model->get_energy_grad(coordinates_tensor, species_tensor, atomic_energies, gradients, forces);
+}
+
 //=====================================// 
 
 

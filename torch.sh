@@ -3,7 +3,7 @@ mkdir build4
 
 cd build4
 
-TORCH_INSTALLED_DIR=/depot/lslipche/data/skp/libtorch ## Address for the location of your LibTorch installation
+#TORCH_INSTALLED_DIR=/depot/lslipche/data/skp/libtorch ## Address for the location of your LibTorch installation
 
 echo "TORCH_DIR = " ${TORCH_INSTALLED_DIR}
 

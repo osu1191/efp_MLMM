@@ -106,15 +106,16 @@ struct sys {
 struct state {
 	struct efp *efp;
 	struct ff *ff;
-    struct torch *torch;
+        struct torch *torch;
 	struct cfg *cfg;
 	struct sys *sys;
 	double energy;
-    double torch_energy;
+        double torch_energy;
 	double *grad;
-    double *torch_grad;
+        double *torch_grad;
 	int counter;
 	int init;
+	int torch_model_type;
 };
 
 void NORETURN die(const char *, ...);

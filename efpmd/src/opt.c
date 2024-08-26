@@ -29,6 +29,7 @@
 #include "torch.h"
 //#include "../torch/c_libtorch.h"
 
+
 void sim_opt(struct state *state);
 
 static double compute_efp(size_t n, const double *x, double *gx, void *data)
@@ -88,7 +89,7 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
                         printf("%lf ", state->torch_grad[i]);
                     }
                 }
-
+		// check to see if these gradients are in proper units
                 memcpy(gx, state->torch_grad, (3 * n_special_atoms) * sizeof(double));
                 break;
 

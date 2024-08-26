@@ -1,0 +1,58 @@
+class ANIModel {
+public:
+    ANIModel() : module_loaded(false) {}
+
+    void load_module(int module_type) {
+        try {
+            if (module_type == 1) {
+                module = torch::jit::load("ANI1x.pt");
+            } else if (module_type == 2) {
+                module = torch::jit::load("ANI2x.pt");
+            } else {
+                throw std::invalid_argument("Invalid module_type provided.");
+            }
+            module_loaded = true;
+        } catch (const c10::Error& e) {
+            std::cerr << "Error loading the model: " << e.what() << std::endl;
+            module_loaded = false;
+        }
+    }
+
+    void get_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species,
+                         float* atomic_energies, float* gradients, float* forces) {
+        if (!module_loaded) {
+            std::cerr << "Error: Module not loaded. Call load_module() first." << std::endl;
+            return;
+        }
+
+        std::vector<torch::jit::IValue> inputs;
+        inputs.push_back(std::make_tuple(species, coordinates));
+
+        auto output = module.forward(inputs).toTuple();
+        at::Tensor energy_tensor = output->elements()[1].toTensor();
+
+        energy_tensor.backward(torch::ones_like(energy_tensor));
+
+        auto gradient = coordinates.grad();
+
+        if (!gradient.defined() || gradient.numel() == 0) {
+            std::cerr << "Error: Gradient is not defined or empty." << std::endl;
+            return;
+        }
+
+        auto force = -gradient;
+
+        auto atomic_energies_tensor = module.get_method("atomic_energies")(inputs).toTuple()->elements()[1].toTensor();
+
+        std::memcpy(atomic_energies, atomic_energies_tensor.data_ptr<float>(), atomic_energies_tensor.numel() * sizeof(float));
+        std::memcpy(gradients, gradient.data_ptr<float>(), gradient.numel() * sizeof(float));
+        std::memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
+
+        coordinates.grad().zero_();
+    }
+
+private:
+    torch::jit::Module module;
+    bool module_loaded;
+};
+

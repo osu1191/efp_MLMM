@@ -55,6 +55,11 @@ void generateSpeciesEnergyForcesWrapper(const void* model, const float* const* c
 
 void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces, int model_type);
 
+void* load_ani_model(int module_type);
+void get_ani_energy_grad(void* model, const float* coordinates, const int* species,
+                         float* atomic_energies, float* gradients, float* forces, int num_atoms);
+
+
 //================// 
 
 

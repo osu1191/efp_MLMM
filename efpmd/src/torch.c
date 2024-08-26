@@ -67,6 +67,8 @@ void torch_init(struct torch *torch, size_t natom) {
 }
  
 //int torch_load_nn(struct torch *torch, const char *nn_name) {
+// torch_load_nn(int torch_model_type){ torch->module }
+
 
 void torch_get_atom_count(struct torch *torch , size_t natom) {
     natom = torch->natoms;
