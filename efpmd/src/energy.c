@@ -26,7 +26,6 @@
 
 #include "common.h"
 #include "torch.h"
-//#include "../torch/torch.h"
 
 /* current coordinates from efp struct are used */
 void compute_energy(struct state *state, bool do_grad)
@@ -88,6 +87,7 @@ void compute_energy(struct state *state, bool do_grad)
  
 	int model_t = state->torch_model_type;
         torch_compute(state->torch, model_t);
+
         state->torch_energy = torch_get_energy(state->torch);
 
 	if (cfg_get_int(state->cfg, "verbose") == 5) printf("\n State energy (state->energy) %lf \n", state->energy);

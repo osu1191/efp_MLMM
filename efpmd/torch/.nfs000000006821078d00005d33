@@ -2,11 +2,11 @@
 #define C_LIBTORCH_H_
 
 #include <stdint.h>
+#include <torch/script.h>
+#include <torch/torch.h>
 
-//#include <torch/script.h>
-//#include <torch/torch.h>
+#ifdef __cplusplus
 
-/*
 class ANIModel {
 public:
     ANIModel() = default;
@@ -21,11 +21,25 @@ public:
 private:
     torch::jit::Module module;
 };
-*/
 
-#ifdef __cplusplus
 extern "C" {
 #endif
+
+#if defined(_WIN32)
+#ifdef C_TORCH_COMPILE_LIBRARY
+#define C_TORCH_EXPORT __declspec(dllexport)
+#else
+#define C_TORCH_EXPORT __declspec(dllimport)
+#endif
+#else
+#define C_TORCH_EXPORT __attribute__((visibility("default")))
+#endif
+
+
+#define C_TORCH_TENSOR_MAX_DIM  (8)
+
+#define C_TORCH_DEFAULT_DIM (-1)
+#define C_TORCH_DEFAULT_N (-1)
 
 struct TensorData;  // Opaque
 
@@ -64,7 +78,6 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 //void get_ani_energy_grad(void* model, const float* coordinates, const int* species,
 //                         float* atomic_energies, float* gradients, float* forces, int num_atoms);
 
-typedef struct ANIModel ANIModel;
 
 ANIModel* ANIModel_new();
 void load_ani_model(ANIModel* model, int model_type);

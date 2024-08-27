@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+//#include "../torch/c_libtorch.h"
+#include "state.h"
 
 typedef void (*sim_fn_t)(struct state *);
 
@@ -464,6 +466,11 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
  
 	state->torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
 	// torch_load_nn(state->torch_model_type);
+
+ 
+	ANIState global_state;
+        global_state.model = ANIModel_new();
+        load_ani_model(global_state.model, 1); // Load ANI1x
  
         spec_frag = cfg_get_int(cfg, "special_fragment");
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));

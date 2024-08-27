@@ -43,8 +43,9 @@
 
 #include <efp.h>
 #include <ff.h>
-//#include "../torch/c_libtorch.h"
 #include <mathutil.h>
+
+//#include "../torch/c_libtorch.h"
 
 #include "cfg.h"
 #include "msg.h"
@@ -117,6 +118,7 @@ struct state {
 	int init;
 	int torch_model_type;
 };
+
 
 void NORETURN die(const char *, ...);
 void NORETURN error(const char *, ...);

@@ -117,7 +117,8 @@ void torch_set_atom_species_double(struct torch *torch, size_t atom, double *ato
 
 // SKP's torch version
 void torch_compute(struct torch *torch, int model_type) {
-
+//void torch_compute2(struct torch *torch) {
+ 
     // prepare data arrays 
     msg("\nSINGLE FRAGMENT TORCH JOB\n-------------------------\n");
     struct state *state;
@@ -161,7 +162,8 @@ void torch_compute(struct torch *torch, int model_type) {
 
     // call function
     get_torch_energy_grad((float*)frag_coordinates, frag_species, n_atoms, energies, gradients, forces, model_type);
-
+    
+	
     // print torch data for verification
     
     printf("\nSpecial fragment Atomic Energies:\n--------------------------------\n");

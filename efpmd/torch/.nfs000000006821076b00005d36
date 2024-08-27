@@ -5,7 +5,6 @@
 #include <torch/nn/functional.h>
 #include <torch/serialize.h>
 #include "c_libtorch.h"
-#include "ANIModel.h"
 //#include <torch/torch.h>
 #include <torch/serialize/archive.h>
 #include <torch/serialize/tensor.h>
@@ -23,7 +22,6 @@ struct Atom {
     std::vector<float> coordinates;
 };
 
-/*
 class ANIModel {
 public:
     ANIModel() = default;
@@ -38,13 +36,12 @@ public:
 private:
     torch::jit::Module module;
 };
-*/
 
 void ANIModel::load_model(int model_type) {
     if (model_type == 1) {
-        module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
+        module = torch::jit::load("ANI1x_saved2.pt");
     } else if (model_type == 2) {
-        module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI2x_saved.pt");
+        module = torch::jit::load("ANI2x_saved.pt");
     } else {
         std::cerr << "Invalid model type!" << std::endl;
     }
@@ -241,12 +238,7 @@ torch::Tensor compute_gradient(const torch::Tensor& input) {
 // Also try doing it with class as she suggested
                                             
 void get_ANI1_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species, float *atomic_energies, float *gradients, float *forces) {
-  
-	//const char* model_path_env = std::getenv("TORCHANI_DIR");
-        //std::string model_path = std::string(model_path_env) + "ANI1x_saved2.pt";
-        //std::cout << "Model loaded successfully from " << model_path << std::endl;
 
-//    torch::jit::Module module = torch::jit::load(model_path);
     torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(std::make_tuple(species, coordinates));
@@ -490,12 +482,10 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 
 //=================================================
 
-/*
 ANIModel* ANIModel_new();
 void load_ani_model(ANIModel* model, int model_type);
 void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
 void ANIModel_delete(ANIModel* model);
-*/
 
 ANIModel* ANIModel_new() {
     return new ANIModel();

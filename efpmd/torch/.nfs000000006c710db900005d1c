@@ -5,7 +5,6 @@
 #include <torch/nn/functional.h>
 #include <torch/serialize.h>
 #include "c_libtorch.h"
-#include "ANIModel.h"
 //#include <torch/torch.h>
 #include <torch/serialize/archive.h>
 #include <torch/serialize/tensor.h>
@@ -23,63 +22,15 @@ struct Atom {
     std::vector<float> coordinates;
 };
 
-/*
 class ANIModel {
 public:
     ANIModel() = default;
-    void load_model(int model_type);
-    void get_energy_grad(const torch::Tensor& coordinates,
-                         const torch::Tensor& species,
-                         float* atomic_energies,
-                         float* gradients,
-                         float* forces,
-                         int num_atoms);
+    void load_ani_model(int model_type);
+    void get_ani_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
 
 private:
     torch::jit::Module module;
 };
-*/
-
-void ANIModel::load_model(int model_type) {
-    if (model_type == 1) {
-        module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
-    } else if (model_type == 2) {
-        module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI2x_saved.pt");
-    } else {
-        std::cerr << "Invalid model type!" << std::endl;
-    }
-}
-
-void ANIModel::get_energy_grad(const torch::Tensor& coordinates, 
-                               const torch::Tensor& species, 
-                               float* atomic_energies, 
-                               float* gradients, 
-                               float* forces, 
-                               int num_atoms) {
-    std::vector<torch::jit::IValue> inputs;
-    inputs.push_back(std::make_tuple(species, coordinates));
-
-    auto output = module.forward(inputs).toTuple();
-    at::Tensor energy_tensor = output->elements()[1].toTensor();
-
-    auto energy = energy_tensor.item<float>();
-    energy_tensor.backward(torch::ones_like(energy_tensor));
-
-    auto gradient = coordinates.grad();
-
-    if (!gradient.defined() || gradient.numel() == 0) {
-        std::cerr << "Error: Gradient is not defined or empty." << std::endl;
-        return;
-    }
-
-    auto force = -gradient;
-    auto atomic_energies_tensor = module.get_method("atomic_energies")(inputs).toTuple()->elements()[1].toTensor();
-
-    memcpy(atomic_energies, atomic_energies_tensor.data_ptr<float>(), atomic_energies_tensor.numel() * sizeof(float));
-    memcpy(gradients, gradient.data_ptr<float>(), gradient.numel() * sizeof(float));
-    memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
-    coordinates.grad().zero_();
-}
 
 torch::jit::script::Module loadModel(const std::string& modelPath) {
     try {
@@ -241,12 +192,7 @@ torch::Tensor compute_gradient(const torch::Tensor& input) {
 // Also try doing it with class as she suggested
                                             
 void get_ANI1_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species, float *atomic_energies, float *gradients, float *forces) {
-  
-	//const char* model_path_env = std::getenv("TORCHANI_DIR");
-        //std::string model_path = std::string(model_path_env) + "ANI1x_saved2.pt";
-        //std::cout << "Model loaded successfully from " << model_path << std::endl;
 
-//    torch::jit::Module module = torch::jit::load(model_path);
     torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(std::make_tuple(species, coordinates));
@@ -488,24 +434,15 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 //        std::cout << "Forces: " << forces[0] << std::endl; 
 }
 
-//=================================================
-
-/*
-ANIModel* ANIModel_new();
-void load_ani_model(ANIModel* model, int model_type);
-void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
-void ANIModel_delete(ANIModel* model);
-*/
-
 ANIModel* ANIModel_new() {
     return new ANIModel();
 }
 
-void load_ani_model(ANIModel* model, int model_type) {
+void ANIModel_load_model(ANIModel* model, int model_type) {
     model->load_model(model_type);
 }
 
-void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
+void ANIModel_get_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
     auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
     auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
 
@@ -515,7 +452,6 @@ void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* s
 void ANIModel_delete(ANIModel* model) {
     delete model;
 }
-
 
 /*
 void* load_ani_model(int module_type) {
