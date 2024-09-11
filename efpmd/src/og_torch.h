@@ -29,20 +29,9 @@
 #include <assert.h>
 #include <string.h>
 #include "../torch/c_libtorch.h"
-#include "state.h"
 
 /* calculations with torch ani */
-//struct torch;
-
-struct torch {
-    double energy;
-    double *grad;
-    size_t natoms;
-    int *atom_types;
-    double *atom_coords;
-    int nn_type;
-    ANIState global_state;
-};
+struct torch;
 
 struct torch *torch_create(void);
 void torch_init(struct torch *, size_t);
@@ -53,10 +42,29 @@ void torch_get_atom_coord(struct torch *, size_t, double *);
 void torch_set_atom_coord(struct torch *, size_t, const double *);
 void torch_get_coord(struct torch *, double *);
 void torch_set_coord(struct torch *, const double *);
-void torch_set_atom_species(struct torch *torch, const int *); 
-void torch_compute(struct torch *torch, int print); 
+//void torch_set_atom_species(struct torch *, size_t, int *);
+void torch_set_atom_species_double(struct torch *, size_t, double *);
+
+//void torch_compute(struct torch *torch, int model_type);
+void torch_compute2(struct torch *torch);
+
 double torch_get_energy(struct torch *torch);
 void torch_get_gradient(struct torch *, double *);
 void torch_free(struct torch *);
 void torch_print(struct torch *);
-void get_torch_type(struct torch *, const char *);
+int get_torch_type(const char *);
+
+//==========================================//
+/*
+struct ANIState {
+    ANIModel* model;
+};
+
+extern ANIState global_state;
+*/
+//ANIModel* ANIModel_new();
+//void ANIModel_load(ANIModel* model, int model_type);
+//void ANIModel_get_energy_grad(ANIModel* model, const torch::Tensor* coordinates, const torch::Tensor* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
+
+//===========================================
+

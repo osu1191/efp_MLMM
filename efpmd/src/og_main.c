@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+//#include "../torch/c_libtorch.h"
 #include "state.h"
 
 typedef void (*sim_fn_t)(struct state *);
@@ -87,7 +88,7 @@ static struct cfg *make_cfg(void)
 			   EFP_COORD_TYPE_ATOMS});
 
 	cfg_add_string(cfg, "terms", "elec pol disp xr");
-    cfg_add_string(cfg, "special_terms", "elec pol disp xr");
+    	cfg_add_string(cfg, "special_terms", "elec pol disp xr");
 
 	cfg_add_enum(cfg, "elec_damp", EFP_ELEC_DAMP_SCREEN,
 		"screen\n"
@@ -132,8 +133,7 @@ static struct cfg *make_cfg(void)
 	cfg_add_string(cfg, "userlib_path", ".");
 	cfg_add_bool(cfg, "enable_pbc", false);
 	cfg_add_string(cfg, "periodic_box", "30.0 30.0 30.0 90.0 90.0 90.0");
-	cfg_add_double(cfg, "opt_tol", 3.0e-4);
-	cfg_add_double(cfg, "opt_energy_tol", 1.0e-6);
+	cfg_add_double(cfg, "opt_tol", 1.0e-4);
 	cfg_add_double(cfg, "gtest_tol", 1.0e-6);
 	cfg_add_double(cfg, "ref_energy", 0.0);
 	cfg_add_bool(cfg, "hess_central", false);
@@ -166,12 +166,6 @@ static struct cfg *make_cfg(void)
     cfg_add_bool(cfg, "enable_torch", false);
     cfg_add_int(cfg, "opt_special_frag", -1);
     cfg_add_string(cfg, "torch_nn", "ani.pt");
-	
-	cfg_add_enum(cfg, "atom_gradient", ATOM_GRAD_MM,
-	"mm\n"
-	"frag\n",
-	(int []) { ATOM_GRAD_MM,
-			   ATOM_GRAD_FRAG });
 
     cfg_add_enum(cfg, "symm_frag", EFP_SYMM_FRAG_FRAG,
                  "frag\n"
@@ -183,6 +177,7 @@ static struct cfg *make_cfg(void)
     cfg_add_double(cfg, "update_params_cutoff", 0.0);
 
     cfg_add_int(cfg, "print", 0);
+    cfg_add_int(cfg, "verbose", 0);
     return cfg;
 }
 
@@ -325,7 +320,7 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 {
 	struct efp_opts opts = {
 		.terms = get_terms(cfg_get_string(cfg, "terms")),
-        .special_terms = get_special_terms(cfg_get_string(cfg, "special_terms")),
+        	.special_terms = get_special_terms(cfg_get_string(cfg, "special_terms")),
 		.elec_damp = cfg_get_enum(cfg, "elec_damp"),
 		.disp_damp = cfg_get_enum(cfg, "disp_damp"),
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
@@ -337,16 +332,20 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
         .enable_pairwise = cfg_get_bool(cfg, "enable_pairwise"), 
         .ligand = cfg_get_int(cfg, "ligand"),
         .special_fragment = cfg_get_int(cfg, "special_fragment"),
+        .enable_torch = cfg_get_bool(cfg, "enable_torch"),
+        .opt_special_frag = cfg_get_int(cfg, "opt_special_frag"),
+        .print_pbc = cfg_get_bool(cfg, "print_pbc"),
         .symmetry = cfg_get_bool(cfg, "symmetry"),
         .symm_frag = cfg_get_enum(cfg, "symm_frag"),
         .update_params = cfg_get_int(cfg, "update_params"),
         .update_params_cutoff = cfg_get_double(cfg, "update_params_cutoff"),
-        .print = cfg_get_int(cfg, "print")
+        .print = cfg_get_int(cfg, "print"),
+	//.verbose = cfg_get_int(cfg, "verbose")
 	};
 
 	if (opts.xr_cutoff == 0.0) {
 	    opts.xr_cutoff = opts.swf_cutoff;
-	    printf("xr_cutoff is set to %lf \n\n", opts.xr_cutoff * BOHR_RADIUS);
+	    printf("xr_cutoff is set to %lf \n\n", opts.xr_cutoff*0.52917721092);
 	}
 
 	enum efp_coord_type coord_type = cfg_get_enum(cfg, "coord");
@@ -415,14 +414,14 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 
 static void state_init(struct state *state, const struct cfg *cfg, const struct sys *sys)
 {
+	if (cfg_get_int(state->cfg, "verbose") == 5) printf("marker for coming inside state_init\n\n");
 	size_t ntotal, ifrag, nfrag, natom, spec_frag, n_special_atoms, iatom;
 
 	state->efp = create_efp(cfg, sys);
 	state->energy = 0;
 	state->grad = xcalloc(sys->n_frags * 6 + sys->n_charges * 3, sizeof(double));
 	state->ff = NULL;
-    state->torch = NULL;
-	state->torch_grad = NULL;
+        state->torch = NULL;
  
 	if (cfg_get_bool(cfg, "enable_ff")) {
 		if ((state->ff = ff_create()) == NULL)
@@ -458,19 +457,17 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
         //if (!torch_load_nn(state->torch, cfg_get_string(cfg, "torch_nn")))
         //    printf("Could not load torch nn %s, continue testing\n", cfg_get_string(cfg, "torch_nn"));
             //error("cannot load torch NN");
-		//int torch_file_type;
-		//assign_file_type(cfg, torch_file_type);
+	//int torch_file_type;
+	//assign_file_type(cfg, torch_file_type);
         //printf("Assigned file type: %d\n", torch_file_type);
 
-	get_torch_type(state->torch, cfg_get_string(cfg, "torch_nn"));
-		//printf("torch_model_type %d\n",torch_model_type);
+	state->torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
+	// torch_load_nn(state->torch_model_type);
 
-	// load torchANI model
-	state->torch->global_state.model = ANIModel_new();
-        load_ani_model(state->torch->global_state.model, 1); // Load ANI1x
- 	
-	//state->global_state.model = ANIModel_new();
-        //load_ani_model(state->global_state.model, 1); // Load ANI1x
+ 
+	// load torchani model;
+        state->global_state.model = ANIModel_new();
+        load_ani_model(state->global_state.model, 1); // Load ANI1x
  
         spec_frag = cfg_get_int(cfg, "special_fragment");
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
@@ -479,28 +476,24 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 
         struct efp_atom *special_atoms;
         special_atoms = xmalloc(n_special_atoms * sizeof(struct efp_atom));
-        check_fail(efp_get_frag_atoms(state->efp, spec_frag, n_special_atoms, special_atoms));
+        check_fail(efp_get_frag_atoms(state->efp, ifrag, n_special_atoms, special_atoms));
 
         //torch_print(state->torch);
-        double *atom_coord_tmp = (double*)malloc(3 * n_special_atoms * sizeof(double));
-		int *atom_znuc = (int*)malloc(3 * n_special_atoms * sizeof(int));
+        double *atom_coord_tmp = malloc(3 * n_special_atoms * sizeof(double));
         for (iatom = 0; iatom < n_special_atoms; iatom++) {
             // send atom coordinates to torch
             atom_coord_tmp[3*iatom] = special_atoms[iatom].x;
             atom_coord_tmp[3*iatom + 1] = special_atoms[iatom].y;
             atom_coord_tmp[3*iatom + 2] = special_atoms[iatom].z;
             // send atom types to torch
-			atom_znuc[iatom] = (int)special_atoms[iatom].znuc;
- 	    	// torch_set_atom_species_double(state->torch, iatom, &special_atoms[iatom].znuc);
+            // torch_set_atom_species(state->torch, iatom, (int*)&special_atoms[iatom].znuc);
+	    torch_set_atom_species_double(state->torch, iatom, &special_atoms[iatom].znuc);
         }
 
         torch_set_coord(state->torch, atom_coord_tmp);
-		torch_set_atom_species(state->torch, atom_znuc);
-
-	ANIModel_delete(state->torch->global_state.model);
+	ANIModel_delete(state->global_state.model);
         free(special_atoms);
         free(atom_coord_tmp);
-	free(atom_znuc);
         //torch_print(state->torch);
     }
 }
@@ -571,13 +564,9 @@ static void convert_units(struct cfg *cfg, struct sys *sys)
 	for (size_t i = 0; i < sys->n_frags; i++) {
 		vec_scale(&sys->frags[i].constraint_xyz, 1.0 / BOHR_RADIUS);
 
-		if (cfg_get_enum(cfg, "coord") == EFP_COORD_TYPE_ATOMS)
-            for (size_t j = 0; j < 3 * sys->frags[i].n_atoms; j++)
-                sys->frags[i].coord[j] /= BOHR_RADIUS;
-        else
-            for (size_t j = 0; j < n_convert; j++)
-                sys->frags[i].coord[j] /= BOHR_RADIUS;
-    }
+		for (size_t j = 0; j < n_convert; j++)
+			sys->frags[i].coord[j] /= BOHR_RADIUS;
+	}
 
 	for (size_t i = 0; i < sys->n_charges; i++)
 		vec_scale(&sys->charges[i].pos, 1.0 / BOHR_RADIUS);
@@ -588,7 +577,6 @@ static void sys_free(struct sys *sys)
 	for (size_t i = 0; i < sys->n_frags; i++) {
         free(sys->frags[i].name);
         free(sys->frags[i].atoms);
-		free(sys->frags[i].coord);
 //	    for (size_t j = 0; j < sys->frags[i].n_atoms; j++)
 //	        free(sys->frags[i].atoms[j])
 	}
@@ -651,7 +639,6 @@ int main(int argc, char **argv)
 	sys_free(state.sys);
 	cfg_free(state.cfg);
 	free(state.grad);
-	if (state.torch_grad) free(state.torch_grad);
 exit:
 #ifdef EFP_USE_MPI
 	MPI_Finalize();

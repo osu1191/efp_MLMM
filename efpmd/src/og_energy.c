@@ -26,7 +26,6 @@
 
 #include "common.h"
 #include "torch.h"
-//#include "../torch/torch.h"
 
 /* current coordinates from efp struct are used */
 void compute_energy(struct state *state, bool do_grad)
@@ -36,10 +35,6 @@ void compute_energy(struct state *state, bool do_grad)
 	double xyz[3], xyzabc[6], *grad;
 	size_t ifrag, nfrag, iatom, natom, spec_frag, n_special_atoms;
 	int itotal;
-
-    if (cfg_get_int(state->cfg, "print")>0) {
-        print_geometry(state->efp);
-    }
 
 	/* EFP part */
     // print_geometry(state->efp);
@@ -54,8 +49,7 @@ void compute_energy(struct state *state, bool do_grad)
 	}
 
 	state->energy = efp_energy.total;
-	// print_energy(state);
-	// printf("\n State energy (state->energy) %lf \n", state->energy);	
+	printf("\n State energy (state->energy) %lf \n", state->energy);	
  
 	/* constraints */
 	for (ifrag = 0; ifrag < nfrag; ifrag++) {
@@ -84,16 +78,23 @@ void compute_energy(struct state *state, bool do_grad)
 
     /* Torch fragment part here */
     if (cfg_get_bool(state->cfg, "enable_torch")) {
-
-        torch_compute(state->torch, cfg_get_int(state->cfg, "print"));
+        // prototype to compute energy and gradients with torch
+        // torch_compute_energy(struct torch *, bool do_grad);
+	//int torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
+ 
+	int model_t = state->torch_model_type;
+//        torch_compute(state->torch, model_t);
+	torch_compute2(state->torch);
+ 
         state->torch_energy = torch_get_energy(state->torch);
+
+
         state->energy += state->torch_energy;
-		// print_energy(state);
 
         if (do_grad) {
             torch_get_gradient(state->torch, state->torch_grad);
         }
-        // torch_print(state->torch);
+        torch_print(state->torch);
     }
 
 	/* MM force field part */

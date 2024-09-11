@@ -7,8 +7,8 @@ special_fragment 0
 enable_torch true
 torch_nn ani1.pt
 opt_special_frag 0
-max_steps 200
-verbose 5
+max_steps 20
+print 0
 
 fragment h2o_l
    0.000   0.000   0.000   0.000   0.000   0.000

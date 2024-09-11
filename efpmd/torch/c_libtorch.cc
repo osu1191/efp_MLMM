@@ -23,22 +23,6 @@ struct Atom {
     std::vector<float> coordinates;
 };
 
-/*
-class ANIModel {
-public:
-    ANIModel() = default;
-    void load_model(int model_type);
-    void get_energy_grad(const torch::Tensor& coordinates,
-                         const torch::Tensor& species,
-                         float* atomic_energies,
-                         float* gradients,
-                         float* forces,
-                         int num_atoms);
-
-private:
-    torch::jit::Module module;
-};
-*/
 
 void ANIModel::load_model(int model_type) {
     if (model_type == 1) {
@@ -490,12 +474,6 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 
 //=================================================
 
-/*
-ANIModel* ANIModel_new();
-void load_ani_model(ANIModel* model, int model_type);
-void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
-void ANIModel_delete(ANIModel* model);
-*/
 
 ANIModel* ANIModel_new() {
     return new ANIModel();
@@ -505,7 +483,7 @@ void load_ani_model(ANIModel* model, int model_type) {
     model->load_model(model_type);
 }
 
-void get_ani_energy_grad(ANIModel* model, const float* coordinates, const int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
+void get_ani_energy_grad(ANIModel* model, float* coordinates, int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
     auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
     auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
 
@@ -517,23 +495,6 @@ void ANIModel_delete(ANIModel* model) {
 }
 
 
-/*
-void* load_ani_model(int module_type) {
-    ANIModel* model = new ANIModel();
-    model->load_module(module_type);
-    return static_cast<void*>(model);
-}
-
-void get_ani_energy_grad(void* model_ptr, const float* coordinates, const int* species,
-                                    float* atomic_energies, float* gradients, float* forces, int num_atoms) {
-    ANIModel* model = static_cast<ANIModel*>(model_ptr);
-
-    auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
-    auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
-
-    model->get_energy_grad(coordinates_tensor, species_tensor, atomic_energies, gradients, forces);
-}
-*/
 //=====================================// 
 
 
