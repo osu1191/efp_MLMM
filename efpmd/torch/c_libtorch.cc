@@ -59,6 +59,10 @@ void ANIModel::get_energy_grad(const torch::Tensor& coordinates,
     auto force = -gradient;
     auto atomic_energies_tensor = module.get_method("atomic_energies")(inputs).toTuple()->elements()[1].toTensor();
 
+    std::cout << "=========TESTING FOR OBJECT BASED MODEL LOADING ===============" << std::endl;
+    std::cout << " Energy: " << energy << std::endl;
+    std::cout << " Force: " << force << std::endl;
+
     memcpy(atomic_energies, atomic_energies_tensor.data_ptr<float>(), atomic_energies_tensor.numel() * sizeof(float));
     memcpy(gradients, gradient.data_ptr<float>(), gradient.numel() * sizeof(float));
     memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
@@ -231,7 +235,7 @@ void get_ANI1_energy_grad(const torch::Tensor& coordinates, const torch::Tensor&
         //std::cout << "Model loaded successfully from " << model_path << std::endl;
 
 //    torch::jit::Module module = torch::jit::load(model_path);
-    torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
+    torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/ANI1x_saved2.pt");
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(std::make_tuple(species, coordinates));
 
@@ -260,7 +264,7 @@ void get_ANI1_energy_grad(const torch::Tensor& coordinates, const torch::Tensor&
 
 void get_ANI2_energy_grad(const torch::Tensor& coordinates, const torch::Tensor& species, float *atomic_energies, float *gradients, float *forces) {
 
-    torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI2x_saved.pt");
+    torch::jit::Module module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/ANI2x_saved.pt");
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(std::make_tuple(species, coordinates));
 
@@ -285,6 +289,125 @@ void get_ANI2_energy_grad(const torch::Tensor& coordinates, const torch::Tensor&
     memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
     coordinates.grad().zero_();
  
+}
+ 
+//void engrad_custom_model(const torch::Tensor& coordinates, const torch::Tensor& species){
+void engrad_custom_model(){
+
+        torch::jit::script::Module aev_computer = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/aev_scripted.pt");
+        torch::jit::script::Module model = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/custom_model_script.pt");
+
+
+        torch::Tensor coordinates = torch::tensor({{{0.03192167, 0.00638559, 0.01301679},
+                                                    {-0.83140486, 0.39370209, -0.26395324},
+                                                    {-0.66518241, -0.84461308, 0.20759389},
+                                                    {0.45554739, 0.54289633, 0.81170881},
+                                                    {0.66091919, -0.16799635, -0.91037834}}},
+                                                  torch::requires_grad(true));
+
+        torch::Tensor species = torch::tensor({{1, 0, 0, 0, 0}}, torch::kLong);
+
+        torch::Tensor elecpots = torch::tensor({{1.0, 0.0, 2.0, 1.0, 2.0}}, torch::kFloat);
+
+        auto aev_input = std::make_tuple(species, coordinates);
+        auto aev_output = aev_computer.forward({aev_input}).toTuple();
+        torch::Tensor aevs = aev_output->elements()[1].toTensor();  // AEV is the second output
+
+        torch::Tensor aep = torch::cat({aevs, elecpots.unsqueeze(-1)}, -1);
+
+        auto model_input = std::make_tuple(species, aep);
+        auto energy_output = model.forward({model_input}).toTuple();
+        torch::Tensor energy = energy_output->elements()[1].toTensor();
+
+        std::cout << "Energy Tensor: " << energy_output->elements()[1].toTensor() << std::endl;
+        std::cout << "Coords Tensor: " << coordinates << std::endl;
+
+        std::cout << "Coords grad??: " << coordinates.requires_grad() << std::endl;
+        std::cout << "Energy grad??: " << energy.requires_grad() << std::endl;
+
+        std::cout << "aevs grad??: " << aevs.requires_grad() << std::endl;
+        std::cout << "aep grad??: " << aep.requires_grad() << std::endl;
+
+
+        std::cout << "Energy: " << energy << std::endl;
+
+        std::vector<torch::Tensor> gradients = torch::autograd::grad({energy}, {coordinates});
+        torch::Tensor derivative = gradients[0];
+
+        std::cout << "Derivative: " << derivative << std::endl;
+
+        auto force = -derivative;
+        std::cout << "Force: " << force << std::endl;
+
+}
+
+void engrad2_custom_model(const torch::Tensor& species, const torch::Tensor& coordinates, const torch::Tensor& elecpots, float* gradients, float* forces) {
+
+    torch::jit::script::Module aev_computer = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/aev_scripted.pt");
+    torch::jit::script::Module model = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/custom_model_script.pt");
+
+    auto aev_input = std::make_tuple(species, coordinates);
+    auto aev_output = aev_computer.forward({aev_input}).toTuple();
+    torch::Tensor aevs = aev_output->elements()[1].toTensor();
+
+    torch::Tensor aep = torch::cat({aevs, elecpots.unsqueeze(-1)}, -1);
+
+    auto model_input = std::make_tuple(species, aep);
+    auto energy_output = model.forward({model_input}).toTuple();
+    torch::Tensor energy = energy_output->elements()[1].toTensor();
+
+    std::vector<torch::Tensor> gradients_tensors = torch::autograd::grad({energy}, {coordinates});
+    torch::Tensor derivative = gradients_tensors[0];
+
+    torch::Tensor force = -derivative;
+
+    memcpy(gradients, derivative.data_ptr<float>(), derivative.numel() * sizeof(float));
+    memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
+
+    coordinates.grad().zero_();
+}
+
+void engrad3_custom_model(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* cus_grads, float* cus_forces) {
+
+    torch::jit::script::Module aev_computer = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/aev_scripted.pt");
+    torch::jit::script::Module model = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/custom_model_script.pt");
+ 
+    torch::Tensor coordinates = torch::from_blob(coordinates_data, {1, num_atoms, 3}, torch::kFloat32).clone().set_requires_grad(true);
+    torch::Tensor species = torch::from_blob(species_data, {1, num_atoms}, torch::kInt64).clone();
+    torch::Tensor elecpots = torch::from_blob(elecpots_data, {1, num_atoms}, torch::kFloat32).clone();
+
+    coordinates = coordinates.contiguous();
+
+    //std::cout << "Species Tensor Shape: " << species.sizes() << std::endl;
+    //std::cout << "Coordinates Tensor Shape: " << coordinates.sizes() << std::endl;
+    //std::cout << "Elecpots Tensor Shape: " << elecpots.sizes() << std::endl;
+    //std::cout << "Species Data: " << species << std::endl;
+    //std::cout << "Coordinates Data: " << coordinates << std::endl;
+    //std::cout << "Elecpots Data: " << elecpots << std::endl;
+
+    auto aev_input = std::make_tuple(species, coordinates);
+    auto aev_output = aev_computer.forward({aev_input}).toTuple();
+    torch::Tensor aevs = aev_output->elements()[1].toTensor();  // Get AEV output
+
+    torch::Tensor aep = torch::cat({aevs, elecpots.unsqueeze(-1)}, -1);
+
+    auto model_input = std::make_tuple(species, aep);
+    auto energy_output = model.forward({model_input}).toTuple();
+    torch::Tensor energy = energy_output->elements()[1].toTensor();
+ 
+    //std::cout << "Energy: " << energy << std::endl;
+
+    std::vector<torch::Tensor> gradients = torch::autograd::grad({energy}, {coordinates});
+    torch::Tensor derivative = gradients[0];
+
+    torch::Tensor force = -derivative;
+    //std::cout << "Force: " << force << std::endl;
+
+    memcpy(cus_grads, derivative.data_ptr<float>(), derivative.numel() * sizeof(float));
+    memcpy(cus_forces, force.data_ptr<float>(), force.numel() * sizeof(float));
+    memcpy(custom_energy, energy.data_ptr<float>(), sizeof(float));
+
+    //std::cout << "Custom Energy: " << *custom_energy << std::endl;
 }
 
 // ============= Defining new class ANIModel for loading ANI1 or ANI2
@@ -457,11 +580,19 @@ void generateSpeciesEnergyForcesWrapper(const void* model,
 // load NNP and its wrapper.. call that wrapper in opt.c/main.c...
 
 void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces, int model_type) {
+
 	torch::Tensor speciesTensor = torch::from_blob(const_cast<int*>(species_data), {1, num_atoms}, torch::kInt32);
         torch::Tensor coordinatesTensor = torch::from_blob(const_cast<float*>(coordinates_data), {1, num_atoms, 3}, torch::requires_grad(true));
 
 	if(model_type == 1) get_ANI1_energy_grad(coordinatesTensor, speciesTensor, atomic_energies, gradients, forces);
 	if(model_type == 2) get_ANI2_energy_grad(coordinatesTensor, speciesTensor, atomic_energies, gradients, forces);
+
+//	std::cout << "===================================" << std::endl;
+//	std::cout << " Test routine for engrad_custom_model " << std::endl;
+//	engrad_custom_model(coordinatesTensor, speciesTensor);	
+//	engrad_custom_model();
+//	std::cout << " Done with engrad_custom_model " << std::endl;
+//	std::cout << "===================================" << std::endl;
 
 	//std::cout << "Species Tensor: " << speciesTensor.sizes() << " - " << speciesTensor.dtype() << std::endl;
         //std::cout << "Coordinates Tensor: " << coordinatesTensor.sizes() << " - " << coordinatesTensor.dtype() << std::endl;
@@ -470,6 +601,41 @@ void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_a
 //	std::cout << "Atomic Energies: " << atomic_energies[0] << std::endl;
 //        std::cout << "Gradients: " << gradients[0] << std::endl;
 //        std::cout << "Forces: " << forces[0] << std::endl; 
+}
+
+/*
+void get_custom_energy_grad(float* coordinates_data, int* species_data) {
+
+        torch::Tensor speciesTensor = torch::from_blob(const_cast<int*>(species_data), {1, num_atoms}, torch::kInt32);
+        torch::Tensor coordinatesTensor = torch::from_blob(const_cast<float*>(coordinates_data), {1, num_atoms, 3}, torch::requires_grad(true));
+
+	std::cout << "===================================" << std::endl;
+	std::cout << " Test routine for engrad_custom_model " << std::endl;
+	engrad_custom_model(coordinatesTensor, speciesTensor);
+	std::cout << " Done with engrad_custom_model " << std::endl;
+	std::cout << "===================================" << std::endl;
+
+}
+*/
+
+void engrad2_custom_model_wrapper(float* coordinates_data, int* species_data, float* elecpots_data, int num_atoms, float* gradients, float* forces) {
+ 
+//    torch::Tensor species = torch::from_blob(species_data, {1, num_atoms}, torch::kLong);
+    torch::Tensor species = torch::from_blob(const_cast<int*>(species_data), {1, num_atoms}, torch::kInt32);
+ 
+//    torch::Tensor coordinates = torch::from_blob(coordinates_data, {1, num_atoms, 3}, torch::kFloat32).requires_grad(true);
+    torch::Tensor coordinates = torch::from_blob(const_cast<float*>(coordinates_data), {1, num_atoms, 3}, torch::requires_grad(true));
+  
+//    torch::Tensor elecpots = torch::from_blob(elecpots_data, {1, num_atoms}, torch::kFloat32);
+    torch::Tensor elecpots = torch::from_blob(const_cast<float*>(elecpots_data), {1, num_atoms}, torch::kFloat32);
+
+    engrad2_custom_model(species, coordinates, elecpots, gradients, forces);
+}
+
+void engrad3_custom_model_wrapper(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* gradients, float* forces) {
+
+    engrad3_custom_model(coordinates_data, species_data, elecpots_data, num_atoms, custom_energy, gradients, forces);
+//    std::cout << "Custom energy in wrapper " << *custom_energy << std::endl;
 }
 
 //=================================================
@@ -483,11 +649,18 @@ void load_ani_model(ANIModel* model, int model_type) {
     model->load_model(model_type);
 }
 
+//void load_ani_model(int model_type) {
+//    model->load_model(model_type);
+//}
+
+
 void get_ani_energy_grad(ANIModel* model, float* coordinates, int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
     auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
     auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
 
     model->get_energy_grad(coordinates_tensor, species_tensor, atomic_energies, gradients, forces, num_atoms);
+
+    std::cout << "==========END OF TEST OBJECT BASED MODEL LOADING=============" << std::endl; 
 }
 
 void ANIModel_delete(ANIModel* model) {

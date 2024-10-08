@@ -59,7 +59,9 @@ void generateEnergyForcesWrapper(const void* model, const float* const* coordina
 void generateSpeciesEnergyForcesWrapper(const void* model, const float* const* coordinates, const int* species, int num_atoms, float* energy, float* const* forces);
 
 void get_torch_energy_grad(float* coordinates_data, int* species_data, int num_atoms, float *atomic_energies, float *gradients, float *forces, int model_type);
-
+void get_custom_energy_grad(float* coordinates_data, int* species_data);
+void engrad2_custom_model_wrapper(float* coordinates_data, int* species_data, float* elecpots_data, int num_atoms, float* gradients, float* forces);
+void engrad3_custom_model_wrapper(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float *custom_energy, float *gradients, float *forces);
 
 // ================== //
 // ==== Wrappers ==== //
@@ -68,7 +70,8 @@ typedef struct ANIModel ANIModel;
 
 ANIModel* ANIModel_new();
 void load_ani_model(ANIModel* model, int model_type);
-void get_ani_energy_grad(ANIModel* mode, float* coordinates, int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
+//void load_ani_model(int model_type);
+void get_ani_energy_grad(ANIModel* model, float* coordinates, int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms);
 void ANIModel_delete(ANIModel* model);
  
 //================// 

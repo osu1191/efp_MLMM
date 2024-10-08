@@ -49,7 +49,6 @@
 #include "cfg.h"
 #include "msg.h"
 #include "phys.h"
-#include "state.h"
 
 #define NORETURN __attribute__((noreturn))
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
@@ -103,17 +102,19 @@ struct sys {
 struct state {
 	struct efp *efp;
 	struct ff *ff;
-    struct torch *torch;
+    	struct torch *torch;
+	struct torch_state *torch_state;
 	struct cfg *cfg;
 	struct sys *sys;
 	double energy;
-    double torch_energy;
+	double *spec_elpot;
+    	double torch_energy;
 	double *grad;
-    double *torch_grad;
+    	double *torch_grad;
 	int counter;
 	int init;
-        //ANIState global_state;
 };
+
 
 void NORETURN die(const char *, ...);
 void NORETURN error(const char *, ...);

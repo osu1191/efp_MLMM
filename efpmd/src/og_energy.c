@@ -82,19 +82,16 @@ void compute_energy(struct state *state, bool do_grad)
         // torch_compute_energy(struct torch *, bool do_grad);
 	//int torch_model_type = get_torch_type(cfg_get_string(state->cfg, "torch_nn"));
  
-	int model_t = state->torch_model_type;
+	//int model_t = state->torch_model_type;
 //        torch_compute(state->torch, model_t);
 	torch_compute2(state->torch);
- 
         state->torch_energy = torch_get_energy(state->torch);
-
-
         state->energy += state->torch_energy;
 
         if (do_grad) {
             torch_get_gradient(state->torch, state->torch_grad);
         }
-        torch_print(state->torch);
+        // torch_print(state->torch);
     }
 
 	/* MM force field part */

@@ -30,9 +30,11 @@
 #include <string.h>
 #include "../torch/c_libtorch.h"
 #include "state.h"
+#include "common.h"
 
 /* calculations with torch ani */
 //struct torch;
+
 
 struct torch {
     double energy;
@@ -40,9 +42,17 @@ struct torch {
     size_t natoms;
     int *atom_types;
     double *atom_coords;
+    double *elpot;
     int nn_type;
     ANIState global_state;
+    //ANIModel* ani_model; 
 };
+
+
+//struct torch_state {
+//    ANIState global_state;
+//};
+
 
 struct torch *torch_create(void);
 void torch_init(struct torch *, size_t);
@@ -52,11 +62,19 @@ void torch_set_atom_count(struct torch *, size_t *natom);
 void torch_get_atom_coord(struct torch *, size_t, double *);
 void torch_set_atom_coord(struct torch *, size_t, const double *);
 void torch_get_coord(struct torch *, double *);
+
 void torch_set_coord(struct torch *, const double *);
+void torch_set_elpot(struct torch *, const double *);
+
 void torch_set_atom_species(struct torch *torch, const int *); 
 void torch_compute(struct torch *torch, int print); 
 double torch_get_energy(struct torch *torch);
 void torch_get_gradient(struct torch *, double *);
 void torch_free(struct torch *);
 void torch_print(struct torch *);
+
+//void torch_custom();
+void torch_custom_compute(struct torch *torch, int print);
+void atomic_number_to_species(const int* atomic_num, int64_t* frag_species, size_t n_atoms);
+
 void get_torch_type(struct torch *, const char *);

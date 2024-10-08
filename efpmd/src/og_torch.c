@@ -123,19 +123,19 @@ void torch_compute2(struct torch *torch) {
  
     // prepare data arrays 
     msg("\nSINGLE FRAGMENT TORCH JOB\n-------------------------\n");
-    struct state *state;
+    // struct state *state;
     size_t n_atoms = torch->natoms;
-    float frag_coordinates[n_atoms][3];
-    float *energies, *gradients, *forces;
+    // float frag_coordinates[n_atoms][3];
+    float *energies, *gradients, *forces, *frag_coord;
 
     energies = malloc(n_atoms * sizeof(float));
     gradients = malloc(n_atoms * 3 * sizeof(float));
     forces = malloc(n_atoms * 3 * sizeof(float));
 
     for (size_t i=0; i<n_atoms; i++) {
-        frag_coordinates[i][0] = (float)torch->atom_coords[i*3] * BOHR_RADIUS;
-        frag_coordinates[i][1] = (float)torch->atom_coords[i*3+1] * BOHR_RADIUS;
-        frag_coordinates[i][2] = (float)torch->atom_coords[i*3+2] * BOHR_RADIUS;
+        frag_coord[i*3] = (float)torch->atom_coords[i*3] * BOHR_RADIUS;
+        frag_coord[i*3+1] = (float)torch->atom_coords[i*3+1] * BOHR_RADIUS;
+        frag_coord[i*3+2] = (float)torch->atom_coords[i*3+2] * BOHR_RADIUS;
     }
 
     int frag_species[n_atoms];
@@ -148,7 +148,7 @@ void torch_compute2(struct torch *torch) {
 
     // call function
 //    get_torch_energy_grad((float*)frag_coordinates, frag_species, n_atoms, energies, gradients, forces, model_type);
-    get_ani_energy_grad(torch->global_state.model, (float*)frag_coordinates, frag_species, energies, gradients, forces, n_atoms);  
+    get_ani_energy_grad(state->torch->global_state.model, (float*)frag_coord, frag_species, energies, gradients, forces, n_atoms);  
 	
     // print torch data for verification
     
@@ -225,6 +225,7 @@ void torch_free(struct torch *torch) {
         free(torch->atom_coords);
         free(torch->atom_types);
         free(torch);
+	ANIModel_delete(state->torch->global_state.model);
     }
 }
 

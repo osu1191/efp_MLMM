@@ -29,6 +29,7 @@
 #include <assert.h>
 #include <string.h>
 #include "../torch/c_libtorch.h"
+#include "state.h"
 
 /* calculations with torch ani */
 struct torch;
@@ -42,10 +43,10 @@ void torch_get_atom_coord(struct torch *, size_t, double *);
 void torch_set_atom_coord(struct torch *, size_t, const double *);
 void torch_get_coord(struct torch *, double *);
 void torch_set_coord(struct torch *, const double *);
-//void torch_set_atom_species(struct torch *, size_t, int *);
-void torch_set_atom_species_double(struct torch *, size_t, double *);
+void torch_set_atom_species(struct torch *, size_t, int *);
+//void torch_set_atom_species_double(struct torch *, size_t, double *);
 
-//void torch_compute(struct torch *torch, int model_type);
+//void torch_compute(struct torch *torch, int print);
 void torch_compute2(struct torch *torch);
 
 double torch_get_energy(struct torch *torch);

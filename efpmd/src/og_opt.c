@@ -39,6 +39,7 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
     int static opt_switch = 0;
     size_t n_frags, n_charge, spec_frag, n_special_atoms;
     struct state *state = (struct state *)data;
+    double *tmp_grad;
 
     check_fail(efp_get_frag_count(state->efp, &n_frags));
     check_fail(efp_get_point_charge_count(state->efp, &n_charge));
@@ -57,10 +58,10 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
 		// state->init is to omit the printing of the Initial step,
 		// which does not show this issue
 
-		state->counter++;
-		state->init++;
-		if(state->init > 1) printf("counter for no. of times compute_efp, case-0 is traversed at 1-time %4d\n",state->counter);
-		if(state->counter > 1 && state->init > 1) printf("This should not have happened!!! This is where 'compute_efp' has been evoked\n more than once for a particular optimization step\n");
+//		state->counter++;
+//		state->init++;
+//		if(state->init > 1) printf("counter for no. of times compute_efp, case-0 is traversed at 1-time %4d\n",state->counter);
+//		if(state->counter > 1 && state->init > 1) printf("This should not have happened!!! This is where 'compute_efp' has been evoked\n more than once for a particular optimization step\n");
                 assert(n == (3 * n_special_atoms));
                 // propagate special fragment coordinates to EFP and update fragment parameters
                 check_fail(update_special_fragment(state->efp, x));
@@ -78,6 +79,25 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
                 // combine EFP and torch (atomic) gradients on special fragments
 	        // commenting this for now... trying to optimizing 1 fragment only with torch gradients	
                 // check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, state->torch_grad));
+		tmp_grad = xcalloc(n*3, sizeof (double));
+
+		if (n_frags > 1) {
+                    if (cfg_get_enum(state->cfg, "atom_gradient") == ATOM_GRAD_MM) {
+                        check_fail(efp_get_atom_gradient(state->efp, spec_frag, tmp_grad));
+                    }
+		    else
+			check_fail(efp_get_frag_atomic_gradient(state->efp, spec_frag, tmp_grad));
+		    
+		    if (cfg_get_int(state->cfg, "print") > 1) {
+			printf("\nEFP fragment atomic gradient\n");
+			for (size_t i = 0; i < n; i++) 
+			    printf("%lf ", tmp_grad[i]);
+			printf("\n");
+			}
+
+			for (size_t i = 0; i < n; i++)
+			    state->torch_grad[i] += tmp_grad[i];
+		}		
 
                 if (cfg_get_int(state->cfg, "print") > 1) {
                     printf("\nTotal torch + EFP gradient\n");

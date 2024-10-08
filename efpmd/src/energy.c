@@ -85,7 +85,17 @@ void compute_energy(struct state *state, bool do_grad)
     /* Torch fragment part here */
     if (cfg_get_bool(state->cfg, "enable_torch")) {
 
-        torch_compute(state->torch, cfg_get_int(state->cfg, "print"));
+//        torch_compute(state->torch, cfg_get_int(state->cfg, "print"));
+
+	if (cfg_get_bool(state->cfg, "apply_elpot")) {
+		printf("\n\n================= TEST FOR CUSTOM MODEL=====================\n");
+		torch_custom_compute(state->torch, cfg_get_int(state->cfg, "print")); 	
+		printf("================= END OF TEST FOR CUSTOM MODEL=====================\n\n");
+	} else {
+		torch_compute(state->torch, cfg_get_int(state->cfg, "print"));
+	}
+
+
         state->torch_energy = torch_get_energy(state->torch);
         state->energy += state->torch_energy;
 		// print_energy(state);
