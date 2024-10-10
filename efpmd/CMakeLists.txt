@@ -86,6 +86,8 @@ target_compile_definitions(
   PRIVATE
     $<BUILD_INTERFACE:FRAGLIB_PATH="/../fraglib">
     $<INSTALL_INTERFACE:FRAGLIB_PATH="${CMAKE_INSTALL_DATADIR}/${efp}/fraglib">
+    $<BUILD_INTERFACE:ML_PATH="../nnlib">
+#    $<INSTALL_INTERFACE:ML_PATH="${CMAKE_INSTALL_DATADIR}/${efp}/nnlib">
   )
 
 add_executable(${efp}::efpmd ALIAS efpmd)

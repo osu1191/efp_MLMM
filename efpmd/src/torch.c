@@ -25,10 +25,10 @@
  */
 
 #include "torch.h"
-//#include "common.h"
+#include "common.h"
 #include "cfg.h"
 #include <stdio.h>
-#include "state.h"
+//#include "state.h"
 
 /*
 struct torch {
@@ -165,7 +165,6 @@ void torch_custom_compute(struct torch *torch, int print) {
     float custom_energy;
 
     elecpots_data = malloc(n_atoms * sizeof(float));
-    //energies = malloc(n_atoms * sizeof(float));
     gradients = malloc(n_atoms * 3 * sizeof(float));
     forces = malloc(n_atoms * 3 * sizeof(float));
 
@@ -179,12 +178,6 @@ void torch_custom_compute(struct torch *torch, int print) {
 	elecpots_data[i] = (float) torch->elpot[i];
     }
 
-//    printf("=============TORCH ELPOT=============\n");
-//    for (size_t j = 0; j < n_atoms; j++) {
-//	printf("%12.6f %12.6f\n",torch->elpot[j], elecpots_data[j]);
-//    } 
-//    printf("====================================\n");
-
     int atomic_num[n_atoms];
     for (size_t i=0; i<n_atoms; i++) {
        atomic_num[i] = torch->atom_types[i];
@@ -192,6 +185,12 @@ void torch_custom_compute(struct torch *torch, int print) {
     
     int64_t frag_species[n_atoms];
     atomic_number_to_species(atomic_num, frag_species, n_atoms);    
+
+    printf("=============TORCH ELPOT=============\n");
+    for (size_t j = 0; j < n_atoms; j++) {
+        printf("%2d %12.6f\n",torch->atom_types[j], elecpots_data[j]);
+    }
+    printf("====================================\n");
 
     // feed torch->elpot hear
     // convert double to float
@@ -201,7 +200,7 @@ void torch_custom_compute(struct torch *torch, int print) {
 //    float *elecpots_data;
 //    elecpots_data = malloc(n_atoms * sizeof(float));
 
-    engrad3_custom_model_wrapper(frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
+    engrad_custom_model_wrapper(frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
 
     torch->energy = custom_energy;
 //    printf("Energy in torch_custom2 = %12.6f \n",torch->energy);
@@ -267,18 +266,21 @@ void atomic_number_to_species(const int* atomic_num, int64_t* frag_species, size
 }
 
 // SKP's torch version
-void torch_compute(struct torch *torch, int print) {
+void torch_compute(struct torch *torch, const char* nn_path, int print) {
 
     // prepare data arrays 
     // msg("\n TORCH CALL \n---------------------------------\n");
 
     //struct torch_state *torch_state;
-
-//    torch_custom();
-
-    torch->global_state.model = ANIModel_new();
-    load_ani_model(torch->global_state.model, torch->nn_type); 
  
+//    torch_custom();
+    //const char* nn_path = "/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/"; 
+    //torch->global_state.model = ANIModel_new();
+    //load_ani_model(torch->global_state.model, torch->nn_type, nn_path); 
+ 
+    torch->ani_model = ANIModel_new();
+    load_ani_model(torch->ani_model, torch->nn_type, nn_path);
+
     size_t n_atoms = torch->natoms;
     float *energies, *gradients, *forces, *frag_coord;
 
@@ -303,11 +305,11 @@ void torch_compute(struct torch *torch, int print) {
     double total_energy = 0.0;
 
     // call function
-    get_torch_energy_grad(frag_coord, frag_species, n_atoms, energies, gradients, forces, torch->nn_type);
+    //get_torch_energy_grad(frag_coord, frag_species, n_atoms, energies, gradients, forces, torch->nn_type);
  
-    get_ani_energy_grad(torch->global_state.model, frag_coord, frag_species, energies, gradients, forces, n_atoms);     
+    //get_ani_energy_grad(torch->global_state.model, frag_coord, frag_species, energies, gradients, forces, n_atoms);     
  
-    //get_ani_energy_grad(torch->ani_model, frag_coord, frag_species, energies, gradients, forces, n_atoms);
+    get_ani_energy_grad(torch->ani_model, frag_coord, frag_species, energies, gradients, forces, n_atoms);
    // torch-ani_model  instead of torch->global_state.model
 
     // printf("   Special fragment Atomic Energies, Coordinates, Gradients in H, A, H/A \n----------------------------------\n");
@@ -353,7 +355,8 @@ void torch_compute(struct torch *torch, int print) {
 
     memcpy(torch->grad, tG_double, (3 * n_atoms) * sizeof(double)); // Atomistic gradient for the EFP-ML fragment
 
-    ANIModel_delete(torch->global_state.model);
+    //ANIModel_delete(torch->global_state.model);
+    ANIModel_delete(torch->ani_model);
     // if (print> 0) torch_print(torch);
     torch_print(torch);
     free(energies);

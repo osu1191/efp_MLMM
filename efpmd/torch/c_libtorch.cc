@@ -23,12 +23,26 @@ struct Atom {
     std::vector<float> coordinates;
 };
 
-
+/*
 void ANIModel::load_model(int model_type) {
     if (model_type == 1) {
         module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI1x_saved2.pt");
     } else if (model_type == 2) {
         module = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/ANI2x_saved.pt");
+    } else {
+        std::cerr << "Invalid model type!" << std::endl;
+    }
+}
+*/
+
+void ANIModel::load_model(int model_type, const std::string &nn_path) {
+    //std::string nn_path = "/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib";
+    if (model_type == 1) {
+        module = torch::jit::load(nn_path + "/ANI1x_saved2.pt");
+	std::cout << "Model loaded from: " << nn_path + "/ANI1x_saved2.pt" << std::endl;
+    } else if (model_type == 2) {
+        module = torch::jit::load(nn_path + "/ANI2x_saved.pt");
+	std::cout << "Model loaded from: " << nn_path + "/ANI2x_saved.pt" << std::endl;
     } else {
         std::cerr << "Invalid model type!" << std::endl;
     }
@@ -290,7 +304,8 @@ void get_ANI2_energy_grad(const torch::Tensor& coordinates, const torch::Tensor&
     coordinates.grad().zero_();
  
 }
- 
+
+/* 
 //void engrad_custom_model(const torch::Tensor& coordinates, const torch::Tensor& species){
 void engrad_custom_model(){
 
@@ -366,8 +381,9 @@ void engrad2_custom_model(const torch::Tensor& species, const torch::Tensor& coo
 
     coordinates.grad().zero_();
 }
+*/
 
-void engrad3_custom_model(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* cus_grads, float* cus_forces) {
+void engrad_custom_model(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* cus_grads, float* cus_forces) {
 
     torch::jit::script::Module aev_computer = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/aev_scripted.pt");
     torch::jit::script::Module model = torch::jit::load("/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib/custom_model_script.pt");
@@ -616,7 +632,7 @@ void get_custom_energy_grad(float* coordinates_data, int* species_data) {
 	std::cout << "===================================" << std::endl;
 
 }
-*/
+
 
 void engrad2_custom_model_wrapper(float* coordinates_data, int* species_data, float* elecpots_data, int num_atoms, float* gradients, float* forces) {
  
@@ -631,10 +647,11 @@ void engrad2_custom_model_wrapper(float* coordinates_data, int* species_data, fl
 
     engrad2_custom_model(species, coordinates, elecpots, gradients, forces);
 }
+*/
 
-void engrad3_custom_model_wrapper(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* gradients, float* forces) {
+void engrad_custom_model_wrapper(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* gradients, float* forces) {
 
-    engrad3_custom_model(coordinates_data, species_data, elecpots_data, num_atoms, custom_energy, gradients, forces);
+    engrad_custom_model(coordinates_data, species_data, elecpots_data, num_atoms, custom_energy, gradients, forces);
 //    std::cout << "Custom energy in wrapper " << *custom_energy << std::endl;
 }
 
@@ -645,8 +662,16 @@ ANIModel* ANIModel_new() {
     return new ANIModel();
 }
 
+/*
 void load_ani_model(ANIModel* model, int model_type) {
     model->load_model(model_type);
+}
+*/
+
+void load_ani_model(ANIModel* model, int model_type, const char* nn_path) {
+    //nn_path = "/depot/lslipche/data/skp/torch_skp_branch/libefp/nnlib"; 
+    std::string path_str(nn_path);
+    model->load_model(model_type, path_str);
 }
 
 //void load_ani_model(int model_type) {

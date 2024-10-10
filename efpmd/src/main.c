@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "state.h"
+//#include "state.h"
 
 typedef void (*sim_fn_t)(struct state *);
 
@@ -127,10 +127,11 @@ static struct cfg *make_cfg(void)
 	cfg_add_string(cfg, "efp_params_file", "params.efp");
 	cfg_add_bool(cfg, "enable_cutoff", false);
 	cfg_add_double(cfg, "swf_cutoff", 10.0);
-    cfg_add_double(cfg, "xr_cutoff", 0.0);
+    	cfg_add_double(cfg, "xr_cutoff", 0.0);
 	cfg_add_int(cfg, "max_steps", 100);
 	cfg_add_int(cfg, "multistep_steps", 1);
 	cfg_add_string(cfg, "fraglib_path", FRAGLIB_PATH);
+	cfg_add_string(cfg, "ml_path", ML_PATH);
 	cfg_add_string(cfg, "userlib_path", ".");
 	cfg_add_bool(cfg, "enable_pbc", false);
 	cfg_add_string(cfg, "periodic_box", "30.0 30.0 30.0 90.0 90.0 90.0");
@@ -474,9 +475,9 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 
 //================== Try here ==================================================//
 	//int model_t = 1;
-	printf("testing state->torch : printing nn_type = \n",state->torch->nn_type);
-	printf("testing state->torch : printing natoms = \n",state->torch->natoms);	
-	printf("testing state->torch : printing energy = \n",state->torch->energy);
+	//printf("testing state->torch : printing nn_type = \n",state->torch->nn_type);
+	//printf("testing state->torch : printing natoms = \n",state->torch->natoms);	
+	//printf("testing state->torch : printing energy = \n",state->torch->energy);
 
 	//state->torch->ani_model = ANIModel_new();
         //load_ani_model(state->torch, cfg_get_string(cfg, "torch_nn");
@@ -511,6 +512,10 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 
         torch_set_coord(state->torch, atom_coord_tmp);
 	torch_set_atom_species(state->torch, atom_znuc);
+	
+	printf("testing state->torch : printing nn_type = \n",state->torch->nn_type);
+        printf("testing state->torch : printing natoms = \n",state->torch->natoms);
+        printf("testing state->torch : printing energy = \n",state->torch->energy);
 
 	// atomic elpot extraction 
 	//double *spec_elpot_tmp = malloc(n_special_atoms * sizeof(double));

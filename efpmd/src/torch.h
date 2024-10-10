@@ -29,8 +29,8 @@
 #include <assert.h>
 #include <string.h>
 #include "../torch/c_libtorch.h"
-#include "state.h"
-#include "common.h"
+//#include "state.h"
+//#include "common.h"
 
 /* calculations with torch ani */
 //struct torch;
@@ -44,8 +44,8 @@ struct torch {
     double *atom_coords;
     double *elpot;
     int nn_type;
-    ANIState global_state;
-    //ANIModel* ani_model; 
+    //ANIState global_state;
+    ANIModel* ani_model; 
 };
 
 
@@ -67,7 +67,7 @@ void torch_set_coord(struct torch *, const double *);
 void torch_set_elpot(struct torch *, const double *);
 
 void torch_set_atom_species(struct torch *torch, const int *); 
-void torch_compute(struct torch *torch, int print); 
+void torch_compute(struct torch *torch, const char* nn_path, int print); 
 double torch_get_energy(struct torch *torch);
 void torch_get_gradient(struct torch *, double *);
 void torch_free(struct torch *);
