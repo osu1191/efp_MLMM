@@ -26,7 +26,10 @@
 
 #include "common.h"
 #include "torch.h"
+#include "time.h"
 //#include "../torch/torch.h"
+
+void get_frag_elpot(struct state *);
 
 /* current coordinates from efp struct are used */
 void compute_energy(struct state *state, bool do_grad)
@@ -88,13 +91,35 @@ void compute_energy(struct state *state, bool do_grad)
 //        torch_compute(state->torch, cfg_get_int(state->cfg, "print"));
 
 	if (cfg_get_bool(state->cfg, "apply_elpot")) {
+
+                get_frag_elpot(state);
+
+                printf("\nTesting elpot printing\n");
+		size_t spec_frag, n_special_atoms;
+		spec_frag = cfg_get_int(state->cfg, "special_fragment");
+		efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms);	
+                for (iatom = 0; iatom < n_special_atoms; iatom++) {
+                      printf("%12.6f\n",state->spec_elpot[iatom]);
+                }
+                printf("Done testing elpot\n\n");
+
+                torch_set_elpot(state->torch, state->spec_elpot);
+
 		printf("\n\n=================CUSTOM MODEL=====================\n\n");
+		clock_t start_time = clock();
 		torch_custom_compute(state->torch, cfg_get_int(state->cfg, "print")); 	
+		clock_t end_time = clock();
+		double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+		printf("Time taken by energy_compute() is: %f seconds\n", time_taken);
 		printf("=======================================================\n\n");
 	} 
 	else {
 		printf("\n\n=================REGULAR ANI-MODEL=====================\n");
+		clock_t start_time = clock();
 		torch_compute(state->torch, cfg_get_string(state->cfg, "ml_path"), cfg_get_int(state->cfg, "print"));
+		clock_t end_time = clock();
+                double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+                printf("Time taken by energy_compute() is: %f seconds\n", time_taken);
 		printf("\n\n========================================================\n");
 	}
 

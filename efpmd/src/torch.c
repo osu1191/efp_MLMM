@@ -30,17 +30,6 @@
 #include <stdio.h>
 //#include "state.h"
 
-/*
-struct torch {
-    double energy;
-    double *grad;
-    size_t natoms;
-    int *atom_types;
-    double *atom_coords;
-    int nn_type;
-    ANIState global_state;
-};
-*/
 
 struct torch *torch_create(void) {
     struct torch *torch;
@@ -192,18 +181,11 @@ void torch_custom_compute(struct torch *torch, int print) {
     }
     printf("====================================\n");
 
-    // feed torch->elpot hear
-    // convert double to float
-    // or form torch->elpot as a float
-
-    //float elecpots_data[3] = {1.0, 0.0, 2.0};
-//    float *elecpots_data;
-//    elecpots_data = malloc(n_atoms * sizeof(float));
-
-    engrad_custom_model_wrapper(frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
+    //engrad_custom_model_wrapper(frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
+ 
+    get_custom_energy_grad_wrapper(torch->ani_model, frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
 
     torch->energy = custom_energy;
-//    printf("Energy in torch_custom2 = %12.6f \n",torch->energy);
 
     if (print > 1) {
         printf("Gradients:\n");
@@ -268,18 +250,10 @@ void atomic_number_to_species(const int* atomic_num, int64_t* frag_species, size
 // SKP's torch version
 void torch_compute(struct torch *torch, const char* nn_path, int print) {
 
-    // prepare data arrays 
-    // msg("\n TORCH CALL \n---------------------------------\n");
-
-    //struct torch_state *torch_state;
- 
-//    torch_custom();
     //const char* nn_path = "/depot/lslipche/data/skp/torch_skp_branch/libefp/efpmd/torch/"; 
-    //torch->global_state.model = ANIModel_new();
-    //load_ani_model(torch->global_state.model, torch->nn_type, nn_path); 
  
-    torch->ani_model = ANIModel_new();
-    load_ani_model(torch->ani_model, torch->nn_type, nn_path);
+    //torch->ani_model = ANIModel_new();
+    //load_ani_model(torch->ani_model, torch->nn_type, nn_path);
 
     size_t n_atoms = torch->natoms;
     float *energies, *gradients, *forces, *frag_coord;
@@ -307,23 +281,12 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
     // call function
     //get_torch_energy_grad(frag_coord, frag_species, n_atoms, energies, gradients, forces, torch->nn_type);
  
-    //get_ani_energy_grad(torch->global_state.model, frag_coord, frag_species, energies, gradients, forces, n_atoms);     
- 
     get_ani_energy_grad(torch->ani_model, frag_coord, frag_species, energies, gradients, forces, n_atoms);
-   // torch-ani_model  instead of torch->global_state.model
 
     // printf("   Special fragment Atomic Energies, Coordinates, Gradients in H, A, H/A \n----------------------------------\n");
     for (int i = 0; i < n_atoms; ++i) {
-
-        // printf("%4d   %12.6f     %12.6f %12.6f %12.6f    %12.6f %12.6f %12.6f\n",
-        //     torch->atom_types[i],energies[i], 
-        //    frag_coord[3*i], frag_coord[3*i+1], frag_coord[3*i+2],
-        //    gradients[3*i], gradients[3*i+1], gradients[3*i+2]);
-        
         total_energy  += (double)energies[i];
     }
-    //printf("   Total TORCH energy %12.6f\n", total_energy);
-    //printf("----------------------------------\n\n");
     
     torch->energy = total_energy;
 
@@ -355,16 +318,13 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
 
     memcpy(torch->grad, tG_double, (3 * n_atoms) * sizeof(double)); // Atomistic gradient for the EFP-ML fragment
 
-    //ANIModel_delete(torch->global_state.model);
-    ANIModel_delete(torch->ani_model);
-    // if (print> 0) torch_print(torch);
+    //ANIModel_delete(torch->ani_model);
     torch_print(torch);
     free(energies);
     free(gradients);
     free(forces);
     free(frag_coord);
     free(tG_double);
-    //free(torch_state);
 }
 
 
@@ -402,6 +362,7 @@ void torch_free(struct torch *torch) {
         free(torch->atom_coords);
         free(torch->atom_types);
         free(torch);
+	ANIModel_delete(torch->ani_model);
     }
 }
 

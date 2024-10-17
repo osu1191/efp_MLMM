@@ -4,6 +4,7 @@ terms elec pol disp xr
 elec_damp off
 disp_damp off
 fraglib_path ../fraglib
+ml_path ../nnlib/
 special_fragment 0
 enable_torch true
 apply_elpot true

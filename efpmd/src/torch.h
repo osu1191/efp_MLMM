@@ -44,14 +44,11 @@ struct torch {
     double *atom_coords;
     double *elpot;
     int nn_type;
-    //ANIState global_state;
+    const char* custom_model;
+    const char* aev;
     ANIModel* ani_model; 
 };
 
-
-//struct torch_state {
-//    ANIState global_state;
-//};
 
 
 struct torch *torch_create(void);

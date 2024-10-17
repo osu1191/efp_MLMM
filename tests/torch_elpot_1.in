@@ -5,10 +5,12 @@ special_terms qq lj
 elec_damp off
 disp_damp off
 fraglib_path ../fraglib
+userml_path ./
+custom_nn cust.pt
+aev_nn aev.pt
 special_fragment 0
 enable_torch true
 apply_elpot true
-torch_nn ani1.pt
 opt_special_frag 0
 atom_gradient mm
 max_steps 20

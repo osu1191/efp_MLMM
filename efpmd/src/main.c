@@ -43,7 +43,7 @@ void sim_md(struct state *);
 void sim_efield(struct state *);
 void sim_elpot(struct state *);
 void sim_frag_elpot(struct state *);
-void get_frag_elpot(struct state *);
+//void get_frag_elpot(struct state *);
 void sim_gtest(struct state *);
 void sim_etest(struct state *);
 void test_nnp7();
@@ -131,7 +131,12 @@ static struct cfg *make_cfg(void)
 	cfg_add_int(cfg, "max_steps", 100);
 	cfg_add_int(cfg, "multistep_steps", 1);
 	cfg_add_string(cfg, "fraglib_path", FRAGLIB_PATH);
+//========= ML variables added by SKP =======================//
 	cfg_add_string(cfg, "ml_path", ML_PATH);
+	cfg_add_string(cfg, "userml_path", ".");
+	cfg_add_string(cfg, "custom_nn", "custom_model_script.pt");
+	cfg_add_string(cfg, "aev_nn", "aev_scripted.pt");
+//============================================================//
 	cfg_add_string(cfg, "userlib_path", ".");
 	cfg_add_bool(cfg, "enable_pbc", false);
 	cfg_add_string(cfg, "periodic_box", "30.0 30.0 30.0 90.0 90.0 90.0");
@@ -257,6 +262,8 @@ static void add_potentials(struct efp *efp, const struct cfg *cfg, const struct 
 		check_fail(efp_add_potential(efp, path));
 	}
 }
+
+
 
 static unsigned get_terms(const char *str)
 {
@@ -466,26 +473,39 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 		//assign_file_type(cfg, torch_file_type);
         //printf("Assigned file type: %d\n", torch_file_type);
 
-	get_torch_type(state->torch, cfg_get_string(cfg, "torch_nn"));
-		//printf("torch_model_type %d\n",torch_model_type);
+// Default is ../nnlib/aev_scripted.pt and ../nnlib/custom_model_script.pt
+// custom_nn and aev_nn has been initiated as such.
+// If the user wants to use some other model/aev, they should name it along
+// custom_nn and aev_nn rems
+// Similarly ml_path is set to ../nnlib/
+// Any user given path has to be named along userml_path rem. 
 
- 	
-	//state->global_state.model = ANIModel_new();
-        //load_ani_model(state->global_state.model, 1); // Load ANI1x
+	if (cfg_get_bool(cfg, "apply_elpot")) {
+	     state->torch->nn_type = 3;
+	     state->torch->custom_model = cfg_get_string(state->cfg, "custom_nn");
+	     state->torch->aev = cfg_get_string(state->cfg, "aev_nn"); 
+	     fprintf(stderr, "chosen nn_type: Custom model using AEV + elecpots\n");
+	} else {
+	     get_torch_type(state->torch, cfg_get_string(cfg, "torch_nn"));
+	}
+  
+	const char* ml_location;
+	const char* userml_path = cfg_get_string(state->cfg, "userml_path");
+	const char* ml_path = cfg_get_string(state->cfg, "ml_path"); 
 
-//================== Try here ==================================================//
-	//int model_t = 1;
-	//printf("testing state->torch : printing nn_type = \n",state->torch->nn_type);
-	//printf("testing state->torch : printing natoms = \n",state->torch->natoms);	
-	//printf("testing state->torch : printing energy = \n",state->torch->energy);
+	if (strcmp(userml_path, "./") == 0) {
+	    ml_location = userml_path;
+	} else {
+	    ml_location = ml_path; 
+	} 
 
-	//state->torch->ani_model = ANIModel_new();
-        //load_ani_model(state->torch, cfg_get_string(cfg, "torch_nn");
+	printf("The location of NN potential is: %s\n", ml_location);
 
-	//ANIModel_delete(state->torch->global_state.model); 
-//================================================================================// 
+	state->torch->ani_model = ANIModel_new();
+	if (state->torch->nn_type  != 3) load_ani_model(state->torch->ani_model, state->torch->nn_type, cfg_get_string(state->cfg, "ml_path"));
+	if (state->torch->nn_type  == 3) load_custom_ani_model(state->torch->ani_model, state->torch->aev, state->torch->custom_model, ml_location);	
+ 
         spec_frag = cfg_get_int(cfg, "special_fragment");
-        //sim_frag_elpot(state);
 	
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
         torch_init(state->torch, n_special_atoms);
@@ -513,29 +533,9 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
         torch_set_coord(state->torch, atom_coord_tmp);
 	torch_set_atom_species(state->torch, atom_znuc);
 	
-	printf("testing state->torch : printing nn_type = \n",state->torch->nn_type);
-        printf("testing state->torch : printing natoms = \n",state->torch->natoms);
-        printf("testing state->torch : printing energy = \n",state->torch->energy);
-
-	// atomic elpot extraction 
-	//double *spec_elpot_tmp = malloc(n_special_atoms * sizeof(double));
-
-	if (cfg_get_bool(cfg, "apply_elpot")) {	
-	   get_frag_elpot(state);	
-
-	   printf("\nTesting elpot printing\n");
-     	   for (iatom = 0; iatom < n_special_atoms; iatom++) {
-	   	  printf("%12.6f\n",state->spec_elpot[iatom]); 
-	   }
-	   printf("Done testing elpot\n\n");
- 
-	   torch_set_elpot(state->torch, state->spec_elpot);
-	}
-
         free(special_atoms);
         free(atom_coord_tmp);
 	free(atom_znuc);
-        //torch_print(state->torch);
     }
 }
 
