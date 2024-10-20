@@ -6,8 +6,9 @@ fraglib_path ../fraglib
 special_fragment 0
 opt_special_frag 0
 enable_torch true
-torch_nn ani2.pt
+torch_nn ani1.pt
 max_steps 50
+opt_tol 1.0e-3
 print 0
 
 fragment c6h6_l

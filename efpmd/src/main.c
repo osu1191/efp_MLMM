@@ -172,7 +172,8 @@ static struct cfg *make_cfg(void)
     cfg_add_int(cfg, "special_fragment", -100);
 
     cfg_add_bool(cfg, "enable_torch", false);
-    cfg_add_bool(cfg, "apply_elpot", false);
+    cfg_add_bool(cfg, "enable_elpot", false);
+    //cfg_add_bool(cfg, "apply_elpot", false);
     cfg_add_int(cfg, "opt_special_frag", -1);
     cfg_add_string(cfg, "torch_nn", "ani.pt");
 	
@@ -342,6 +343,7 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
 		.pol_driver = cfg_get_enum(cfg, "pol_driver"),
 		.enable_pbc = cfg_get_bool(cfg, "enable_pbc"),
+		.enable_elpot = cfg_get_bool(cfg, "enable_elpot"),
 		.enable_cutoff = cfg_get_bool(cfg, "enable_cutoff"),
 		.swf_cutoff = cfg_get_double(cfg, "swf_cutoff"),
 		.xr_cutoff = cfg_get_double(cfg, "xr_cutoff"),
@@ -480,7 +482,7 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 // Similarly ml_path is set to ../nnlib/
 // Any user given path has to be named along userml_path rem. 
 
-	if (cfg_get_bool(cfg, "apply_elpot")) {
+	if (cfg_get_bool(cfg, "enable_elpot")) {
 	     state->torch->nn_type = 3;
 	     state->torch->custom_model = cfg_get_string(state->cfg, "custom_nn");
 	     state->torch->aev = cfg_get_string(state->cfg, "aev_nn"); 

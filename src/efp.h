@@ -181,6 +181,8 @@ struct efp_opts {
 	enum efp_pol_driver pol_driver;
 	/** Enable periodic boundary conditions if nonzero. */
 	int enable_pbc;
+	/** Enable switching off elpot contribution for custom torch gradient*/
+        int enable_elpot;
 	/** Enable fragment-fragment interaction cutoff if nonzero. */
 	int enable_cutoff;
 	/** Cutoff distance for fragment-fragment interactions. */
