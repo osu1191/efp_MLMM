@@ -1,0 +1,35 @@
+void ANIModel::get_energy_grad(const torch::Tensor& coordinates,
+                               const torch::Tensor& species,
+                               float* atomic_energies,
+                               float* gradients,
+                               float* forces,
+                               int num_atoms) {
+    std::vector<torch::jit::IValue> inputs;
+    inputs.push_back(std::make_tuple(species, coordinates));
+
+    auto output = module.forward(inputs).toTuple();
+    at::Tensor energy_tensor = output->elements()[1].toTensor();
+
+    std::vector<torch::Tensor> gradients_vec = torch::autograd::grad({energy_tensor}, {coordinates}, /*grad_outputs=*/{}, /*retain_graph=*/true, /*create_graph=*/false);
+
+    torch::Tensor gradient = gradients_vec[0];
+
+    if (!gradient.defined() || gradient.numel() == 0) {
+        std::cerr << "Error: Gradient is not defined or empty." << std::endl;
+        return;
+    }
+
+    torch::Tensor force = -gradient;
+
+    auto atomic_energies_tensor = module.get_method("atomic_energies")(inputs).toTuple()->elements()[1].toTensor();
+
+    std::cout << "=========TESTING FOR OBJECT BASED MODEL LOADING ===============" << std::endl;
+    std::cout << " Energy: " << energy_tensor.item<float>() << std::endl;
+    std::cout << " Force: " << force << std::endl;
+    std::cout << "=========================================" << std::endl;
+
+    memcpy(atomic_energies, atomic_energies_tensor.data_ptr<float>(), atomic_energies_tensor.numel() * sizeof(float));
+    memcpy(gradients, gradient.data_ptr<float>(), gradient.numel() * sizeof(float));
+    memcpy(forces, force.data_ptr<float>(), force.numel() * sizeof(float));
+}
+
