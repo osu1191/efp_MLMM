@@ -26,7 +26,11 @@
 
 #include "common.h"
 #include "opt.h"
+
+#ifdef TORCH_SWITCH
 #include "torch.h"
+#endif
+
 //#include "../torch/c_libtorch.h"
 
 void sim_opt(struct state *state);
@@ -43,6 +47,7 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
     check_fail(efp_get_frag_count(state->efp, &n_frags));
     check_fail(efp_get_point_charge_count(state->efp, &n_charge));
 
+#ifdef TORCH_SWITCH
     if (cfg_get_bool(state->cfg, "enable_torch") && cfg_get_int(state->cfg, "opt_special_frag") > -1) {
         // prepare for optimization of atom coordinates of a special fragment
         // through forces provided externally
@@ -200,7 +205,9 @@ static double compute_efp(size_t n, const double *x, double *gx, void *data)
                 break;
         }
     }
-    else {
+#endif
+
+    if (!cfg_get_bool(state->cfg, "enable_torch")) {
         // normal case - no special fragment to optimize
         assert(n == (6 * n_frags + 3 * n_charge));
 
@@ -316,6 +323,7 @@ void sim_opt(struct state *state)
 
     int static algorithm_switch;
 
+#ifdef TORCH_SWITCH
     if (cfg_get_bool(state->cfg, "enable_torch") && cfg_get_int(state->cfg, "opt_special_frag") > -1)
     switch (cfg_get_int(state->cfg, "opt_special_frag")) {
         case 0:
@@ -334,7 +342,9 @@ void sim_opt(struct state *state)
             error("do not know what to do for this opt_special_frag input");
             break;
     }
-    else {
+#endif
+ 
+    if (!cfg_get_bool(state->cfg, "enable_torch")) {
         msg("ENERGY MINIMIZATION JOB\n\n\n");
         algorithm_switch = -1;
     }
@@ -342,6 +352,7 @@ void sim_opt(struct state *state)
     check_fail(efp_get_frag_count(state->efp, &n_frags));
     check_fail(efp_get_point_charge_count(state->efp, &n_charge));
 
+#ifdef TORCH_SWITCH
    if (cfg_get_bool(state->cfg, "enable_torch") && cfg_get_int(state->cfg, "opt_special_frag") > -1) {
         spec_frag = cfg_get_int(state->cfg, "special_fragment");
         check_fail(efp_get_frag_atom_count(state->efp, spec_frag, &n_special_atoms));
@@ -351,9 +362,11 @@ void sim_opt(struct state *state)
         if (cfg_get_int(state->cfg, "opt_special_frag") == 1) 
             n_coord = 6 * (n_frags-1) + 3 * n_charge + 3 * n_special_atoms;
    }
+#endif
+ 
    // normal minimization job
-    else n_coord = 6 * n_frags + 3 * n_charge;
-
+   if (!cfg_get_bool(state->cfg, "enable_torch")) n_coord = 6 * n_frags + 3 * n_charge;
+ 
 
     struct opt_state *opt_state = opt_create(n_coord);
     if (!opt_state)
@@ -364,6 +377,7 @@ void sim_opt(struct state *state)
 
     double coord[n_coord], grad[n_coord];
 
+#ifdef TORCH_SWITCH
     if (cfg_get_bool(state->cfg, "enable_torch")) {
         if (cfg_get_int(state->cfg, "opt_special_frag") == 0) 
             torch_get_coord(state->torch, coord);
@@ -379,8 +393,9 @@ void sim_opt(struct state *state)
             torch_get_coord(state->torch, coord + 6 * (n_frags-1) + 3 * n_charge);
         }
     }
+#endif
     // normal case
-    else {
+    if (!cfg_get_bool(state->cfg, "enable_torch")) {
         check_fail(efp_get_coordinates(state->efp, coord));
         check_fail(efp_get_point_charge_coordinates(state->efp, coord + 6 * n_frags));
     }

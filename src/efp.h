@@ -182,7 +182,9 @@ struct efp_opts {
 	/** Enable periodic boundary conditions if nonzero. */
 	int enable_pbc;
 	/** Enable switching off elpot contribution for custom torch gradient*/
+#ifdef TORCH_SWITCH
         int enable_elpot;
+#endif
 	/** Enable fragment-fragment interaction cutoff if nonzero. */
 	int enable_cutoff;
 	/** Cutoff distance for fragment-fragment interactions. */

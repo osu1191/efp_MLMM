@@ -218,10 +218,12 @@ void print_energy(struct state *state)
 
 	msg("\n");
 
+#ifdef TORCH_SWITCH
 	if (state->torch) {
 		msg("%30s %16.10lf\n", "ML ENERGY", state->torch_energy);
 		msg("\n");
 	}
+#endif
 
 	if (state->ff) {
 		msg("%30s %16.10lf\n", "FORCE-FIELD ENERGY",

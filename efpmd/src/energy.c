@@ -25,7 +25,11 @@
  */
 
 #include "common.h"
+
+#ifdef TORCH_SWITCH
 #include "torch.h"
+#endif
+
 #include "time.h"
 //#include "../torch/torch.h"
 
@@ -86,6 +90,8 @@ void compute_energy(struct state *state, bool do_grad)
 	}
 
     /* Torch fragment part here */
+
+#ifdef TORCH_SWITCH
     if (cfg_get_bool(state->cfg, "enable_torch")) {
 
 	if (cfg_get_bool(state->cfg, "enable_elpot")) {
@@ -131,6 +137,7 @@ void compute_energy(struct state *state, bool do_grad)
             torch_get_gradient(state->torch, state->torch_grad);
         }
     }
+#endif
 
 	/* MM force field part */
 	if (state->ff == NULL)

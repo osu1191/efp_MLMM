@@ -93,7 +93,7 @@ void ANIModel::get_energy_grad(const torch::Tensor& coordinates,
 
     auto output = module.forward(inputs).toTuple();
     at::Tensor energy_tensor = output->elements()[1].toTensor();
-
+// integrate GPU for the autograd part
     std::vector<torch::Tensor> gradients_vec = torch::autograd::grad({energy_tensor}, {coordinates}, {}, true, false);
 
     torch::Tensor gradient = gradients_vec[0];

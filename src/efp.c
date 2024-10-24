@@ -606,10 +606,10 @@ compute_two_body_range(struct efp *efp, size_t frag_from, size_t frag_to,
 				if ((do_elec(&efp->opts) || special_elec) && efp->frags[i].n_multipole_pts > 0 &&
 				    efp->frags[fr_j].n_multipole_pts > 0) {
 					// switch off frag-frag e_elec for torch custom models
-					if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
-                                        else e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+					//if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
+                                        //else e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
 				
-					//e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+					e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
 					e_elec += e_elec_tmp;
 					/* */
 					if (if_pairwise) {
@@ -639,10 +639,10 @@ compute_two_body_range(struct efp *efp, size_t frag_from, size_t frag_to,
                 // MM-like charge-charge interactions
                 if (do_qq(&efp->opts) && special_qq) {
 		// switch off frag-frag e_qq for torch custom models
-		    if (efp->opts.enable_elpot) e_qq += 0.0;
-                    else e_qq += efp_frag_frag_qq(efp, i, fr_j);
+		    //if (efp->opts.enable_elpot) e_qq += 0.0;
+                    //else e_qq += efp_frag_frag_qq(efp, i, fr_j);
                     
-                    //e_qq += efp_frag_frag_qq(efp, i, fr_j);
+                    e_qq += efp_frag_frag_qq(efp, i, fr_j);
                 }
 
                 if (n_lmo_ij > 0) {
@@ -725,10 +725,10 @@ compute_two_body_crystal(struct efp *efp)
                     efp->frags[fr_j].n_multipole_pts > 0) {
 		    
  		    // switch off frag-frag e_elec for torch custom models
-		    if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
-                    else  e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+		    //if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
+                    //else  e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
                         
-                    //e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+                    e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
                     e_elec += e_elec_tmp * factor;
 
                     /* */

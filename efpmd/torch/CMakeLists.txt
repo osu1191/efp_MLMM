@@ -6,6 +6,8 @@ find_package(Torch REQUIRED)
 
 add_library(ctorch SHARED c_libtorch.cc)
 
+# integrate GPU compilation
+
 message("TORCH_INSTALL_PREFIX = " ${TORCH_INSTALL_PREFIX})
 message("TORCH_LIBRARIES = " ${TORCH_LIBRARIES})
 message("TORCH_INCLUDE_DIRS = " ${TORCH_INCLUDE_DIRS})

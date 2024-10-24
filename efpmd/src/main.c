@@ -27,7 +27,11 @@
 #include <time.h>
 
 #include "common.h"
+
+#ifdef TORCH_SWITCH
 #include "torch.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -343,7 +347,9 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
 		.pol_driver = cfg_get_enum(cfg, "pol_driver"),
 		.enable_pbc = cfg_get_bool(cfg, "enable_pbc"),
+#ifdef TORCH_SWITCH
 		.enable_elpot = cfg_get_bool(cfg, "enable_elpot"),
+#endif
 		.enable_cutoff = cfg_get_bool(cfg, "enable_cutoff"),
 		.swf_cutoff = cfg_get_double(cfg, "swf_cutoff"),
 		.xr_cutoff = cfg_get_double(cfg, "xr_cutoff"),
@@ -434,7 +440,7 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 	state->energy = 0;
 	state->grad = xcalloc(sys->n_frags * 6 + sys->n_charges * 3, sizeof(double));
 	state->ff = NULL;
-    state->torch = NULL;
+    	state->torch = NULL;
 	state->torch_grad = NULL;
  
 	if (cfg_get_bool(cfg, "enable_ff")) {
@@ -459,6 +465,7 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 	}
 
     // initiate torch state
+#ifdef TORCH_SWITCH
     if (cfg_get_bool(cfg, "enable_torch")) {
         if (cfg_get_int(cfg, "special_fragment") < 0 || cfg_get_int(cfg, "special_fragment") > nfrag-1)
             error("do not know for which fragment to compute torch: set special_fragment");
@@ -466,21 +473,6 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
         // create torch state
         if ((state->torch = torch_create()) == NULL)
             error("cannot create torch object");
-
-        // load torch NN
-        //if (!torch_load_nn(state->torch, cfg_get_string(cfg, "torch_nn")))
-        //    printf("Could not load torch nn %s, continue testing\n", cfg_get_string(cfg, "torch_nn"));
-            //error("cannot load torch NN");
-		//int torch_file_type;
-		//assign_file_type(cfg, torch_file_type);
-        //printf("Assigned file type: %d\n", torch_file_type);
-
-// Default is ../nnlib/aev_scripted.pt and ../nnlib/custom_model_script.pt
-// custom_nn and aev_nn has been initiated as such.
-// If the user wants to use some other model/aev, they should name it along
-// custom_nn and aev_nn rems
-// Similarly ml_path is set to ../nnlib/
-// Any user given path has to be named along userml_path rem. 
 
 	if (cfg_get_bool(cfg, "enable_elpot")) {
 	     state->torch->nn_type = 3;
@@ -534,11 +526,12 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 
         torch_set_coord(state->torch, atom_coord_tmp);
 	torch_set_atom_species(state->torch, atom_znuc);
-	
+
         free(special_atoms);
         free(atom_coord_tmp);
 	free(atom_znuc);
     }
+#endif
 }
 
 static void print_banner(void)
@@ -683,11 +676,13 @@ int main(int argc, char **argv)
 	msg("TOTAL RUN TIME IS %d SECONDS\n", (int)(difftime(end_time, start_time)));
 	efp_shutdown(state.efp);
 	ff_free(state.ff);
-    torch_free(state.torch);
+#ifdef TORCH_SWITCH 
+    	torch_free(state.torch);
+        if (state.torch_grad) free(state.torch_grad);
+#endif
 	sys_free(state.sys);
 	cfg_free(state.cfg);
 	free(state.grad);
-	if (state.torch_grad) free(state.torch_grad);
 exit:
 #ifdef EFP_USE_MPI
 	MPI_Finalize();
