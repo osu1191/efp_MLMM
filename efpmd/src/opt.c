@@ -30,7 +30,6 @@
 #ifdef TORCH_SWITCH
 #include "torch.h"
 #endif
-
 //#include "../torch/c_libtorch.h"
 
 void sim_opt(struct state *state);
@@ -343,7 +342,7 @@ void sim_opt(struct state *state)
             break;
     }
 #endif
- 
+
     if (!cfg_get_bool(state->cfg, "enable_torch")) {
         msg("ENERGY MINIMIZATION JOB\n\n\n");
         algorithm_switch = -1;
@@ -351,6 +350,7 @@ void sim_opt(struct state *state)
 
     check_fail(efp_get_frag_count(state->efp, &n_frags));
     check_fail(efp_get_point_charge_count(state->efp, &n_charge));
+
 
 #ifdef TORCH_SWITCH
    if (cfg_get_bool(state->cfg, "enable_torch") && cfg_get_int(state->cfg, "opt_special_frag") > -1) {
@@ -363,10 +363,9 @@ void sim_opt(struct state *state)
             n_coord = 6 * (n_frags-1) + 3 * n_charge + 3 * n_special_atoms;
    }
 #endif
- 
    // normal minimization job
-   if (!cfg_get_bool(state->cfg, "enable_torch")) n_coord = 6 * n_frags + 3 * n_charge;
- 
+    if (!cfg_get_bool(state->cfg, "enable_torch")) n_coord = 6 * n_frags + 3 * n_charge;
+
 
     struct opt_state *opt_state = opt_create(n_coord);
     if (!opt_state)
@@ -400,6 +399,8 @@ void sim_opt(struct state *state)
         check_fail(efp_get_point_charge_coordinates(state->efp, coord + 6 * n_frags));
     }
 
+//////////////////////
+    bool if_converged = false;
 
     if (opt_init(opt_state, n_coord, coord))
         error("unable to initialize an optimizer");
@@ -420,8 +421,11 @@ void sim_opt(struct state *state)
     }
 
     for (int step = 1; step <= cfg_get_int(state->cfg, "max_steps"); step++) {
-        if (opt_step(opt_state))
-            error("unable to make an optimization step");
+        if (opt_step(opt_state)) {
+            msg("\nL-BFGS-B is unable to make an optimization step\n");
+            break;
+            // error("unable to make an optimization step");
+        }
 
         double e_new = opt_get_fx(opt_state);
         // just checking coordinates
@@ -441,7 +445,8 @@ void sim_opt(struct state *state)
                 printf("\n");
             }
 
-            msg("OPTIMIZATION CONVERGED\n");
+            msg("\nOPTIMIZATION CONVERGED\n");
+            if_converged = true;
             break;
         }
 
@@ -458,6 +463,8 @@ void sim_opt(struct state *state)
 
         e_old = e_new;
     }
+
+    if (!if_converged) msg("\nOPTIMIZATION HAS NOT CONVERGED\n");
 
     opt_shutdown(opt_state);
 

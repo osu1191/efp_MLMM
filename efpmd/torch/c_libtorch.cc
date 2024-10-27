@@ -125,6 +125,19 @@ void ANIModel::get_custom_energy_grad(float* coordinates_data, int64_t* species_
 
     coordinates = coordinates.contiguous();
 
+    std::map<int, double> ani1x_sae_dict_byIdx = {
+                {0, -0.60095298}, // H
+                {1, -38.08316124}, // C
+                {2, -54.7077577}, // N
+                {3, -75.19446356} // O
+        };
+
+    double shift = 0.0;
+    for (int i = 0; i < species.size(1); ++i) {
+        int atom_type = species[0][i].item<int>();
+        shift += ani1x_sae_dict_byIdx[atom_type];
+    }	
+
     auto aev_input = std::make_tuple(species, coordinates);
     auto aev_output = aev_computer.forward({aev_input}).toTuple();
     torch::Tensor aevs = aev_output->elements()[1].toTensor();  // Get AEV output
@@ -133,16 +146,24 @@ void ANIModel::get_custom_energy_grad(float* coordinates_data, int64_t* species_
 
     auto model_input = std::make_tuple(species, aep);
     auto energy_output = module.forward({model_input}).toTuple();
-    torch::Tensor energy = energy_output->elements()[1].toTensor();
+//    torch::Tensor energy = energy_output->elements()[1].toTensor();
+ 
+    torch::Tensor energy_unshifted = energy_output->elements()[1].toTensor(); //c
+    torch::Tensor energy_shifted = energy_unshifted + shift; //c
 
-    std::vector<torch::Tensor> gradients = torch::autograd::grad({energy}, {coordinates});
+    std::cout << "Energy (unshifted): " << energy_unshifted.item<float>() << std::endl; //c
+    std::cout << "Energy (shifted): " << energy_shifted.item<float>() << std::endl; //c
+
+    std::vector<torch::Tensor> gradients = torch::autograd::grad({energy_shifted}, {coordinates});
     torch::Tensor derivative = gradients[0];
 
     torch::Tensor force = -derivative;
 
+    std::cout << "Force: " << force << std::endl; //c
+
     memcpy(cus_grads, derivative.data_ptr<float>(), derivative.numel() * sizeof(float));
     memcpy(cus_forces, force.data_ptr<float>(), force.numel() * sizeof(float));
-    memcpy(custom_energy, energy.data_ptr<float>(), sizeof(float));
+    memcpy(custom_energy, energy_shifted.data_ptr<float>(), sizeof(float));
 
 }
 

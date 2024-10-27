@@ -2,7 +2,7 @@
 
 setenv TORCH_SWITCH ON
 
-setenv LIBEFP_DIR "/depot/lslipche/data/skp/torch_skp_branch/seltor/libefp"
+setenv LIBEFP_DIR "/depot/lslipche/data/skp/torch_skp_branch/libefp"
 
 if ("$TORCH_SWITCH" == "ON") then
     # Set the installation directory for LibTorch

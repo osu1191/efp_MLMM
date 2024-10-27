@@ -6,10 +6,10 @@ pol_damp tt
 fraglib_path ../fraglib
 special_fragment 2
 enable_torch true
-torch_nn ani1.pt
+torch_nn ani2.pt
 opt_special_frag 0
 atom_gradient frag
-max_steps 100
+max_steps 200
 opt_tol 1.0e-3
 
 

@@ -10,6 +10,7 @@ enable_torch true
 enable_elpot true
 torch_nn ani1.pt
 opt_special_frag 0
+opt_tol 1.0e-3
 atom_gradient frag
 max_steps 50
 print 0

@@ -9,6 +9,7 @@ special_fragment 0
 enable_torch true
 torch_nn ani1.pt
 opt_special_frag 0
+opt_tol 1.0e-3
 atom_gradient mm
 max_steps 20
 print 0
