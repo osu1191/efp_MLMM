@@ -27,6 +27,7 @@
 #include "torch.h"
 #include "common.h"
 #include "cfg.h"
+//#include "time.h"
 #include <stdio.h>
 //#include "state.h"
 
@@ -41,9 +42,11 @@ void get_torch_type(struct torch *torch, const char *str) {
     int file_type;
     if (strcmp(str, "ani1.pt") == 0) {
         file_type = 1;
+        //fprintf(stderr, "chosen nn_type: %s\n", str);
 	printf("chosen nn_type: %s\n", str);
     } else if (strcmp(str, "ani2.pt") == 0) {
         file_type = 2;
+        //fprintf(stderr, "chosen nn_type: %s\n", str);
 	printf("chosen nn_type: %s\n", str);
     } else {
         file_type = -1; // or any other default/error value
@@ -137,7 +140,12 @@ void torch_custom_compute(struct torch *torch, int print) {
     // Hardcoded custom model routine
     // engrad_custom_model_wrapper(frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
  
-    get_custom_energy_grad_wrapper(torch->ani_model, frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces, print);
+    //clock_t start_time = clock(); 
+    get_custom_energy_grad_wrapper(torch->ani_model, frag_coord, frag_species, elecpots_data, n_atoms, &custom_energy, gradients, forces);
+    //clock_t end_time = clock();
+    //double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+    //printf("Time taken by get_ani_energy_grad() is: %f seconds\n", time_taken);
+
 
     torch->energy = custom_energy;
 
@@ -235,9 +243,19 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
     // Hardcoded ANI1/ANI2 routine
     // get_torch_energy_grad(frag_coord, frag_species, n_atoms, energies, gradients, forces, torch->nn_type);
 
-    get_ani_energy_grad(torch->ani_model, frag_coord, frag_species,  &ani_energy, gradients, forces, n_atoms, print);
+    //clock_t start_time = clock();
+
+    get_ani_energy_grad(torch->ani_model, frag_coord, frag_species,  &ani_energy, gradients, forces, n_atoms);
 
     printf("Torch_energy %12.8f\n",ani_energy);
+ 
+    //clock_t end_time = clock();
+    //double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+    //printf("Time taken by get_ani_energy_grad() is: %f seconds\n", time_taken);
+
+    //for (int i = 0; i < n_atoms; ++i) {
+    //    total_energy  += (double)energies[i];
+    //}
     
     torch->energy = ani_energy;
 
@@ -252,7 +270,7 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
         printf("Gradients:\n");
         for (int i = 0; i < n_atoms; ++i) {
             for (int j = 0; j < 3; ++j) {
-                printf("%12.8f\t", gradients[i * 3 + j]);
+                printf("%f\t", gradients[i * 3 + j]);
             }
             printf("\n");
         }
@@ -260,7 +278,7 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
         printf("Forces:\n");
         for (int i = 0; i < n_atoms; ++i) {
             for (int j = 0; j < 3; ++j) {
-                printf("%12.8f\t", forces[i * 3 + j]);
+                printf("%f\t", forces[i * 3 + j]);
             }
             printf("\n");
         }
@@ -287,6 +305,8 @@ void torch_compute(struct torch *torch, const char* nn_path, int print) {
 
     memcpy(torch->grad, tG_double, (3 * n_atoms) * sizeof(double)); 
 
+    //ANIModel_delete(torch->ani_model);
+    //torch_print(torch);
     //free(energies);
     free(gradients);
     free(forces);

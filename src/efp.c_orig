@@ -607,9 +607,7 @@ compute_two_body_range(struct efp *efp, size_t frag_from, size_t frag_to,
 				    efp->frags[fr_j].n_multipole_pts > 0) {
 					e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
                     // zeroing the energy contribution on the special fragment in torch custom models
-#ifdef TORCH_SWITCH
                     if (efp->opts.enable_elpot && if_special_fragment) e_elec_tmp = 0.0;
-#endif
                         //e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
 					e_elec += e_elec_tmp;
 					/* */
@@ -642,9 +640,7 @@ compute_two_body_range(struct efp *efp, size_t frag_from, size_t frag_to,
                     e_qq_tmp = efp_frag_frag_qq(efp, i, fr_j);
 
                     // zeroing the energy contribution on the special fragment in torch custom models
-#ifdef TORCH_SWITCH
                     if (efp->opts.enable_elpot && if_special_fragment) e_qq_tmp = 0.0;
-#endif
                     e_qq += e_qq_tmp;
                 }
 
@@ -728,11 +724,11 @@ compute_two_body_crystal(struct efp *efp)
                     efp->frags[fr_j].n_multipole_pts > 0) {
 		    
  		    // switch off frag-frag e_elec for torch custom models
-		    //if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
+		    if (efp->opts.enable_elpot) e_elec_tmp = 0.0;
                     //else  e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
-                    
-			    
-                    e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+		    if (!efp->opts.enable_elpot) e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
+                         			
+                    //e_elec_tmp = efp_frag_frag_elec(efp, i, fr_j);
                     e_elec += e_elec_tmp * factor;
 
                     /* */
@@ -1440,24 +1436,6 @@ efp_set_frag_atom_coord(struct efp *efp, size_t frag_idx, const double *coord) {
         frag->atoms[i].x = coord[3*i];
         frag->atoms[i].y = coord[3*i + 1];
         frag->atoms[i].z = coord[3*i + 2];
-    }
-
-    return EFP_RESULT_SUCCESS;
-}
-
-EFP_EXPORT enum efp_result
-efp_get_frag_atom_znuc(struct efp *efp, size_t frag_idx, int *charges) {
-
-    struct frag *frag;
-
-    assert(efp);
-    assert(frag_idx < efp->n_frag);
-    assert(charges);
-
-    frag = efp->frags + frag_idx;
-
-    for (size_t i=0; i<frag->n_atoms; i++) {
-        charges[i] = frag->atoms[i].znuc;
     }
 
     return EFP_RESULT_SUCCESS;

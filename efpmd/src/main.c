@@ -350,7 +350,9 @@ static struct efp *create_efp(const struct cfg *cfg, const struct sys *sys)
 		.pol_damp = cfg_get_enum(cfg, "pol_damp"),
 		.pol_driver = cfg_get_enum(cfg, "pol_driver"),
 		.enable_pbc = cfg_get_bool(cfg, "enable_pbc"),
+#ifdef TORCH_SWITCH
 		.enable_elpot = cfg_get_bool(cfg, "enable_elpot"),
+#endif
 		.enable_cutoff = cfg_get_bool(cfg, "enable_cutoff"),
 		.swf_cutoff = cfg_get_double(cfg, "swf_cutoff"),
 		.xr_cutoff = cfg_get_double(cfg, "xr_cutoff"),
@@ -441,9 +443,16 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
 	state->energy = 0;
 	state->grad = xcalloc(sys->n_frags * 6 + sys->n_charges * 3, sizeof(double));
 	state->ff = NULL;
-    state->torch = NULL;
+    	state->torch = NULL;
 	state->torch_grad = NULL;
  
+//#ifndef TORCH_SWITCH
+//    if (cfg_get_bool(cfg, "enable_torch")) {
+//	printf("Please compile with LibTorch for running this function\n");
+//        exit:
+//	return (EXIT_SUCCESS);
+//    } 
+//#endif
 	if (cfg_get_bool(cfg, "enable_ff")) {
 		if ((state->ff = ff_create()) == NULL)
 			error("cannot create ff object");
@@ -486,7 +495,7 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
              state->torch->nn_type = 3;
              state->torch->custom_model = cfg_get_string(state->cfg, "custom_nn");
              state->torch->aev = cfg_get_string(state->cfg, "aev_nn");
-             fprintf(stderr, "chosen nn_type: Custom model using AEV + elecpots\n");
+	     printf("chosen nn_type: Custom model using AEV + elecpots\n");
         } else {
              get_torch_type(state->torch, cfg_get_string(cfg, "torch_nn"));
         }
@@ -513,30 +522,46 @@ static void state_init(struct state *state, const struct cfg *cfg, const struct 
         torch_init(state->torch, n_special_atoms);
         state->torch_grad = xcalloc(n_special_atoms * 3, sizeof(double));
 
-        struct efp_atom *special_atoms;
-        special_atoms = xmalloc(n_special_atoms * sizeof(struct efp_atom));
-        check_fail(efp_get_frag_atoms(state->efp, spec_frag, n_special_atoms, special_atoms));
+        //struct efp_atom *special_atoms;
+        //special_atoms = xmalloc(n_special_atoms * sizeof(struct efp_atom));
+        //check_fail(efp_get_frag_atoms(state->efp, spec_frag, n_special_atoms, special_atoms));
 
         //torch_print(state->torch);
-        // atomic coordinates extraction
-        double *atom_coord_tmp = (double*)malloc(3 * n_special_atoms * sizeof(double));
-	    int *atom_znuc = (int*)malloc(3 * n_special_atoms * sizeof(int));
+        //atomic coordinates extraction
 
-        for (iatom = 0; iatom < n_special_atoms; iatom++) {
-            // send atom coordinates to torch
-            atom_coord_tmp[3*iatom] = special_atoms[iatom].x;
-            atom_coord_tmp[3*iatom + 1] = special_atoms[iatom].y;
-            atom_coord_tmp[3*iatom + 2] = special_atoms[iatom].z;
-            // send atom types to torch
-	        atom_znuc[iatom] = (int)special_atoms[iatom].znuc;
-	    }
+	// special fragment atomic coordinates
+	double *atom_coord = (double*)malloc(3 * n_special_atoms * sizeof(double));
+        check_fail(efp_get_frag_atom_coord(state->efp, spec_frag, atom_coord));
 
-        torch_set_coord(state->torch, atom_coord_tmp);
-	    torch_set_atom_species(state->torch, atom_znuc);
+        int *atom_znuc = (int*)malloc(3 * n_special_atoms * sizeof(int));
+        check_fail(efp_get_frag_atom_znuc(state->efp, spec_frag, atom_znuc));
+
+        torch_set_coord(state->torch, atom_coord);
+            torch_set_atom_species(state->torch, atom_znuc);
+
+        free(atom_coord);
+            free(atom_znuc);
 	
-        free(special_atoms);
-        free(atom_coord_tmp);
-	    free(atom_znuc);
+
+
+        //double *atom_coord_tmp = (double*)malloc(3 * n_special_atoms * sizeof(double));
+	//    int *atom_znuc = (int*)malloc(3 * n_special_atoms * sizeof(int));
+
+        //for (iatom = 0; iatom < n_special_atoms; iatom++) {
+            // send atom coordinates to torch
+        //    atom_coord_tmp[3*iatom] = special_atoms[iatom].x;
+        //    atom_coord_tmp[3*iatom + 1] = special_atoms[iatom].y;
+        //    atom_coord_tmp[3*iatom + 2] = special_atoms[iatom].z;
+            // send atom types to torch
+	//        atom_znuc[iatom] = (int)special_atoms[iatom].znuc;
+	//    }
+
+        //torch_set_coord(state->torch, atom_coord_tmp);
+	//    torch_set_atom_species(state->torch, atom_znuc);
+	
+        //free(special_atoms);
+        //free(atom_coord_tmp);
+	//    free(atom_znuc);
     }
 #endif
 }
@@ -675,6 +700,13 @@ int main(int argc, char **argv)
 	print_config(state.cfg);
 	msg("\n\n");
 	convert_units(state.cfg, state.sys);
+#ifndef TORCH_SWITCH
+    if (cfg_get_bool(state.cfg, "enable_torch")) {
+	printf("\n\nJOB TERMINATED\n");
+        printf("PLEASE COMPILE WITH LIBTORCH FOR RUNNING ENABLE_TORCH FUNCTION\n");
+        goto exit;
+    }
+#endif
 	state_init(&state, state.cfg, state.sys);
 	sim_fn_t sim_fn = get_sim_fn(cfg_get_enum(state.cfg, "run_type"));
 	sim_fn(&state);

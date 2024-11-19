@@ -759,7 +759,9 @@ compute_energy_range(struct efp *efp, size_t from, size_t to, void *data)
         // skip energy contribution for a special fragment in case of torch model with elpot
         // this assumes that we use ml/efp fragment that induces field to other fragments due to its efp nature (multipoles and ind dipoles)
         // this needs to be changed if ml fragment uses ml-predicted charges instead
+#ifdef TORCH_SWITCH
         if (efp->opts.enable_elpot && efp->opts.special_fragment == i) continue;
+#endif
 
         struct frag *frag = efp->frags + i;
 
@@ -1063,6 +1065,7 @@ compute_grad_point(struct efp *efp, size_t frag_idx, size_t pt_idx)
 		if (j == frag_idx || efp_skip_frag_pair(efp, frag_idx, j))
 			continue;
 
+#ifdef TORCH_SWITCH
         // the code below skips gradient contributions to a special (ml) fragment in case of torch model with elpot
         // this assumes that we use ml/efp fragment that induces field to other fragments due to its efp nature (multipoles and ind dipoles)
         // this needs to be changed if ml fragment uses ml-predicted charges instead
@@ -1073,6 +1076,7 @@ compute_grad_point(struct efp *efp, size_t frag_idx, size_t pt_idx)
         bool torch_elpot_i = efp->opts.enable_elpot && (efp->opts.special_fragment == frag_idx);
         // true when torch with elpot is invoked and j is the ml fragment
         bool torch_elpot_j = efp->opts.enable_elpot && (efp->opts.special_fragment == j);
+#endif
 
         struct frag *fr_j = efp->frags + j;
 		struct swf swf = efp_make_swf(efp, fr_i, fr_j, 0);
@@ -1156,15 +1160,21 @@ compute_grad_point(struct efp *efp, size_t frag_idx, size_t pt_idx)
             efp_add_stress(&swf.dr, &force, &efp->stress);
 
             // normal case
+#ifdef TORCH_SWITCH
             if (not_torch_elpot) {
+#endif
                 efp_add_force(efp->grad + frag_idx, CVEC(fr_i->x), CVEC(pt_i->x), &force, &add_i);
                 efp_sub_force(efp->grad + j, CVEC(fr_j->x), CVEC(pt_j->x), &force, &add_j);
                 energy += p1 * e;
+#ifdef TORCH_SWITCH
             }
+#endif
 
+#ifdef TORCH_SWITCH
             // adding gradients to non-ML fragment only in torch elpot model
             if (torch_elpot_i)  efp_sub_force(efp->grad + j, CVEC(fr_j->x), CVEC(pt_j->x), &force, &add_j);
             if (torch_elpot_j)  efp_add_force(efp->grad + frag_idx, CVEC(fr_i->x), CVEC(pt_i->x), &force, &add_i);
+#endif
 		}
 
 		/* induced dipole - induced dipoles */
@@ -1214,14 +1224,21 @@ compute_grad_point(struct efp *efp, size_t frag_idx, size_t pt_idx)
             efp_add_stress(&swf.dr, &force, &efp->stress);
 
             // normal case
+#ifdef TORCH_SWITCH
             if (not_torch_elpot) {
+#endif
                 efp_add_force(efp->grad + frag_idx, CVEC(fr_i->x), CVEC(pt_i->x), &force, &add_i);
                 efp_sub_force(efp->grad + j, CVEC(fr_j->x), CVEC(pt_j->x), &force, &add_j);
                 energy += p1 * e;
+#ifdef TORCH_SWITCH
             }
+#endif
+
+#ifdef TORCH_SWITCH
             // adding gradients to non-ML fragment only in torch elpot model
             if (torch_elpot_i)  efp_sub_force(efp->grad + j, CVEC(fr_j->x), CVEC(pt_j->x), &force, &add_j);
             if (torch_elpot_j)  efp_add_force(efp->grad + frag_idx, CVEC(fr_i->x), CVEC(pt_i->x), &force, &add_i);
+#endif
 		}
 
 		force.x = swf.dswf.x * energy;
