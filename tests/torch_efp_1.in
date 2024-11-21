@@ -7,10 +7,10 @@ fraglib_path ../fraglib
 special_fragment 0
 enable_torch true
 torch_nn ani1.pt
-opt_special_frag 0
-opt_tol 1.0e-3
-atom_gradient frag
-max_steps 50
+opt_special_frag 1
+atom_gradient mm
+max_steps 100
+opt_tol 5.0e-4
 print 0
 
 

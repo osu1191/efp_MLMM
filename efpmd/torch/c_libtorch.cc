@@ -45,7 +45,7 @@ void ANIModel::load_custom_model(const std::string &aev_name, const std::string 
 }
 
 
-// using back propagation
+// using back propagation double energy
 void ANIModel::get_energy_grad(const torch::Tensor& coordinates,
                                const torch::Tensor& species,
                                double* total_energy,
@@ -83,7 +83,7 @@ void ANIModel::get_energy_grad(const torch::Tensor& coordinates,
 }
 
 /*
-// using back propagation
+// using back propagation float energy
 void ANIModel::get_energy_grad(const torch::Tensor& coordinates, 
                                const torch::Tensor& species, 
                                float* atomic_energies, 
@@ -211,58 +211,6 @@ void ANIModel::get_custom_energy_grad(float* coordinates_data, int64_t* species_
     memcpy(cus_forces, force.data_ptr<float>(), force.numel() * sizeof(float));
     *custom_energy = static_cast<double>(energy_shifted.item<double>());
 }
-
-
-/*
-void ANIModel::get_custom_energy_grad(float* coordinates_data, int64_t* species_data, float* elecpots_data, int num_atoms, float* custom_energy, float* cus_grads, float* cus_forces) {
-
-    torch::Tensor coordinates = torch::from_blob(coordinates_data, {1, num_atoms, 3}, torch::kFloat32).clone().set_requires_grad(true);
-    torch::Tensor species = torch::from_blob(species_data, {1, num_atoms}, torch::kInt64).clone();
-    torch::Tensor elecpots = torch::from_blob(elecpots_data, {1, num_atoms}, torch::kFloat32).clone();
-
-    coordinates = coordinates.contiguous();
-
-    std::map<int, double> ani1x_sae_dict_byIdx = {
-                {0, -0.60095298}, // H
-                {1, -38.08316124}, // C
-                {2, -54.7077577}, // N
-                {3, -75.19446356} // O
-        };
-
-    double shift = 0.0;
-    for (int i = 0; i < species.size(1); ++i) {
-        int atom_type = species[0][i].item<int>();
-        shift += ani1x_sae_dict_byIdx[atom_type];
-    }	
-
-    auto aev_input = std::make_tuple(species, coordinates);
-    auto aev_output = aev_computer.forward({aev_input}).toTuple();
-    torch::Tensor aevs = aev_output->elements()[1].toTensor();  // Get AEV output
-
-    torch::Tensor aep = torch::cat({aevs, elecpots.unsqueeze(-1)}, -1);
-
-    auto model_input = std::make_tuple(species, aep);
-    auto energy_output = module.forward({model_input}).toTuple();
- 
-    torch::Tensor energy_unshifted = energy_output->elements()[1].toTensor(); //c
-    torch::Tensor energy_shifted = energy_unshifted + shift; //c
-
-    std::cout << "Energy (unshifted): " << energy_unshifted.item<float>() << std::endl; //c
-    std::cout << "Energy (shifted): " << energy_shifted.item<float>() << std::endl; //c
-
-    std::vector<torch::Tensor> gradients = torch::autograd::grad({energy_shifted}, {coordinates});
-    torch::Tensor derivative = gradients[0];
-
-    torch::Tensor force = -derivative;
-
-    std::cout << "Force: " << force << std::endl; //c
-
-    memcpy(cus_grads, derivative.data_ptr<float>(), derivative.numel() * sizeof(float));
-    memcpy(cus_forces, force.data_ptr<float>(), force.numel() * sizeof(float));
-    memcpy(custom_energy, energy_shifted.data_ptr<float>(), sizeof(float));
-
-}
-*/
 
 
 // Hardcoded custom model routine 
@@ -729,43 +677,6 @@ void get_ani_energy_grad(ANIModel* model, float* coordinates, int* species, doub
     model->get_energy_grad(coordinates_tensor, species_tensor, ani_energy, gradients, forces, num_atoms, print);
 
 }
-
-/*
-void get_ani_energy_grad(ANIModel* model, float* coordinates, int* species, float* atomic_energies, float* gradients, float* forces, int num_atoms) {
-    auto coordinates_tensor = torch::from_blob((float*)coordinates, {1, num_atoms, 3}, torch::requires_grad(true));
-    auto species_tensor = torch::from_blob((int*)species, {1, num_atoms}, torch::kInt32);
-
-    auto start_ani = std::chrono::high_resolution_clock::now();
- 
-    model->get_energy_grad(coordinates_tensor, species_tensor, atomic_energies, gradients, forces, num_atoms);
-
-    auto end_ani = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> ani_duration = end_ani - start_ani;
-    std::cout << "get_energy_grad calculation time: " << ani_duration.count() << " seconds" << std::endl;
-
-    std::cout << "==========END OF TEST OBJECT BASED MODEL LOADING=============" << std::endl; 
-}
-*/
-
- 
-//void get_ani_energy_grad(ANIModel* model, float* coordinates, int64_t* species, float* ani_energy, float* gradients, float* forces, int num_atoms) {
- 
-//    model->get_energy_grad(coordinates, species, ani_energy, gradients, forces, num_atoms);
-
-//}
-
-/* 
-void get_custom_energy_grad_wrapper(ANIModel* model, float* coordinates, int64_t* species, float* elecpots, int num_atoms, float* custom_energy, float* gradients, float* forces) {
-
-    auto start_custom = std::chrono::high_resolution_clock::now();
-
-    model->get_custom_energy_grad(coordinates, species, elecpots, num_atoms, custom_energy, gradients, forces); 
- 
-    auto end_custom = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> custom_duration = end_custom - start_custom;
-    std::cout << "get_custom_energy_grad calculation time: " << custom_duration.count() << " seconds" << std::endl;    
-}
-*/
 
 void get_custom_energy_grad_wrapper(ANIModel* model, float* coordinates, int64_t* species, float* elecpots, int num_atoms, double* custom_energy, float* gradients, float* forces, int print) {
 
