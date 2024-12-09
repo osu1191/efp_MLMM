@@ -95,28 +95,29 @@ void torch_set_atom_species(struct torch *torch, const int *atom_z) {
     memcpy(torch->atom_types, atom_z, (torch->natoms) * sizeof(int));
 }
 
+
 void torch_custom_compute(struct torch *torch, int print) {
-
+ 
     size_t n_atoms = torch->natoms;
-    float *gradients, *forces; 
-    float *frag_coord;
-    float *elecpots_data;
-    //float custom_energy;
+  //  float *gradients, *forces; 
+    double *gradients, *forces;
+    double *frag_coord;
+    double *elecpots_data;
     double custom_energy;
-
-    elecpots_data = malloc(n_atoms * sizeof(float));
-    gradients = malloc(n_atoms * 3 * sizeof(float));
-    forces = malloc(n_atoms * 3 * sizeof(float));
-
-    frag_coord = malloc(n_atoms*3* sizeof(float));
+ 
+    elecpots_data = malloc(n_atoms * sizeof(double));
+ //   gradients = malloc(n_atoms * 3 * sizeof(float));
+ //   forces = malloc(n_atoms * 3 * sizeof(float));
+    gradients = malloc(n_atoms * 3 * sizeof(double));
+    forces = malloc(n_atoms * 3 * sizeof(double));
+    frag_coord = malloc(n_atoms*3* sizeof(double));
 
     for (size_t i=0; i<n_atoms; i++) {
-        frag_coord[i*3] = (float)(torch->atom_coords[i*3] * BOHR_RADIUS);
-        frag_coord[i*3+1] = (float)(torch->atom_coords[i*3+1] * BOHR_RADIUS);
-        frag_coord[i*3+2] = (float)(torch->atom_coords[i*3+2] * BOHR_RADIUS);
-	
-	    elecpots_data[i] = (float) torch->elpot[i];
-    }
+	frag_coord[i*3] = torch->atom_coords[i*3] * BOHR_RADIUS;
+        frag_coord[i*3+1] = torch->atom_coords[i*3+1] * BOHR_RADIUS;
+        frag_coord[i*3+2] = torch->atom_coords[i*3+2] * BOHR_RADIUS; 
+	elecpots_data[i] = torch->elpot[i];
+    } 
 
     int atomic_num[n_atoms];
     for (size_t i=0; i<n_atoms; i++) {
@@ -205,18 +206,13 @@ void atomic_number_to_species(const int* atomic_num, int64_t* frag_species, size
 // SKP's torch version
 void torch_compute(struct torch *torch, const char* nn_path, int print) {
 
-    //torch->ani_model = ANIModel_new();
-    //load_ani_model(torch->ani_model, torch->nn_type, nn_path);
-
     size_t n_atoms = torch->natoms;
     float *gradients, *forces, *frag_coord;
     double ani_energy;    
 
-    //energies = malloc(n_atoms * sizeof(float));
     gradients = malloc(n_atoms * 3 * sizeof(float));
     forces = malloc(n_atoms * 3 * sizeof(float));
-    
-
+ 
     frag_coord = malloc(n_atoms*3* sizeof(float));
     for (size_t i=0; i<n_atoms; i++) {
         frag_coord[i*3] = (float)(torch->atom_coords[i*3] * BOHR_RADIUS);

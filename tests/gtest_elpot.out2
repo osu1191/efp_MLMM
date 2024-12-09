@@ -1,0 +1,838 @@
+EFPMD ver. 1.8.0
+Copyright (c) 2012-2017 Ilya Kaliman
+
+LIBEFP ver. 1.8.0
+Copyright (c) 2012-2017 Ilya Kaliman
+              2018-2022 Lyudmila Slipchenko
+
+Journal References:
+  - Kaliman and Slipchenko, JCC 2013.
+    DOI: http://dx.doi.org/10.1002/jcc.23375
+  - Kaliman and Slipchenko, JCC 2015.
+    DOI: http://dx.doi.org/10.1002/jcc.23772
+
+Project web site: https://github.com/libefp2/libefp/
+
+RUNNING 1 MPI PROCESSES WITH 32 OPENMP THREADS EACH
+WALL CLOCK TIME IS Wed Dec  4 22:23:26 2024
+
+SIMULATION SETTINGS
+
+run_type gtest
+coord atoms
+terms qq lj
+special_terms qq lj
+elec_damp off
+disp_damp off
+pol_damp tt
+pol_driver iterative
+enable_ff false
+enable_multistep false
+ff_geometry ff.xyz
+ff_parameters /../fraglib/params/amber99.prm
+single_params_file false
+efp_params_file params.efp
+enable_cutoff false
+swf_cutoff 10
+xr_cutoff 0
+max_steps 100
+multistep_steps 1
+fraglib_path ../fraglib
+ml_path ../nnlib/
+userml_path .
+custom_nn custom_model_script.pt
+aev_nn aev_scripted.pt
+userlib_path .
+enable_pbc false
+periodic_box 30.0 30.0 30.0 90.0 90.0 90.0
+opt_tol 0.001
+opt_energy_tol 1e-06
+gtest_tol 5e-06
+ref_energy -76.3939
+hess_central false
+num_step_dist 0.001
+num_step_angle 0.01
+ensemble nve
+time_step 1
+print_step 1
+velocitize false
+temperature 300
+pressure 1
+thermostat_tau 1000
+barostat_tau 10000
+ligand -100
+enable_pairwise false
+print_pbc false
+symmetry false
+special_fragment 0
+enable_torch true
+enable_elpot true
+opt_special_frag 0
+torch_nn ani.pt
+atom_gradient mm
+symm_frag frag
+update_params 0
+update_params_cutoff 0
+print 0
+
+
+xr_cutoff is set to 10.000000 
+
+chosen nn_type: Custom model using AEV + elecpots
+The location of NN potential is: ../nnlib/
+
+ANIModel() Constructor
+AEV loaded from: ../nnlib/aev_scripted.pt
+Custom model loaded from: ../nnlib/custom_model_script.pt
+GRADIENT TEST JOB
+
+
+    GEOMETRY (ANGSTROMS)
+
+A01O                -1.815220     2.663988     0.000000
+A02H                -1.616905     1.722730     0.001942
+A03H                -2.465495     2.770431    -0.695494
+
+
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025968          0.054343         0.041324
+   2          0.001568         -0.046837        -0.009094
+   3         -0.027536         -0.007506        -0.032229
+------------------------------------------------------------
+
+ Torch energy -76.383379 
+
+    ENERGY COMPONENTS (ATOMIC UNITS)
+
+          ELECTROSTATIC ENERGY     0.0000000000
+           POLARIZATION ENERGY     0.0000000000
+             DISPERSION ENERGY     0.0000000000
+     EXCHANGE REPULSION ENERGY     0.0000000000
+          POINT CHARGES ENERGY     0.0000000000
+     CHARGE PENETRATION ENERGY     0.0000000000
+                     QQ ENERGY     0.0000000000
+                     LJ ENERGY     0.0000000000
+
+                     ML ENERGY   -76.3833786812
+
+                  TOTAL ENERGY   -76.3833786812
+
+
+              REFERENCE ENERGY   -76.3938952213
+               COMPUTED ENERGY   -76.3833786812  DOES NOT MATCH
+
+
+    COMPUTING NUMERICAL GRADIENT
+
+TESTING GRADIENTS ON EFP FRAGMENTS
+TESTING GRADIENTS ON SPECIAL FRAGMENT ATOMS
+
+
+STARTING TEST_AGRAD()
+
+
+Atom  0, Coord  0 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.816220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025175          0.054588         0.040639
+   2          0.001744         -0.047078        -0.009027
+   3         -0.026919         -0.007510        -0.031611
+------------------------------------------------------------
+
+ Torch energy -76.383427 
+
+
+Atom  0, Coord  0 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.814220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026750          0.054104         0.041997
+   2          0.001396         -0.046603        -0.009159
+   3         -0.028147         -0.007501        -0.032837
+------------------------------------------------------------
+
+ Torch energy -76.383329 
+
+
+Atom  0, Coord  1 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.662988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026213          0.052830         0.041273
+   2          0.001413         -0.045547        -0.008983
+   3         -0.027626         -0.007283        -0.032291
+------------------------------------------------------------
+
+ Torch energy -76.383480 
+
+
+Atom  0, Coord  1 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.664988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025725          0.055838         0.041372
+   2          0.001720         -0.048109        -0.009205
+   3         -0.027446         -0.007729        -0.032167
+------------------------------------------------------------
+
+ Torch energy -76.383275 
+
+
+Atom  0, Coord  2 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988        -0.001000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025282          0.054295         0.040430
+   2          0.001656         -0.046822        -0.008929
+   3         -0.026938         -0.007473        -0.031501
+------------------------------------------------------------
+
+ Torch energy -76.383456 
+
+
+Atom  0, Coord  2 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.001000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026640          0.054396         0.042206
+   2          0.001485         -0.046859        -0.009257
+   3         -0.028125         -0.007538        -0.032949
+------------------------------------------------------------
+
+ Torch energy -76.383300 
+
+
+A A0001    2.59679917E-02   5.43433507E-02   4.13239161E-02
+N A0001    2.59664761E-02   5.43405182E-02   4.13222735E-02  MATCH
+
+Atom  1, Coord  0 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.617905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026143          0.054191         0.041411
+   2          0.001339         -0.046514        -0.009217
+   3         -0.027482         -0.007677        -0.032194
+------------------------------------------------------------
+
+ Torch energy -76.383381 
+
+
+Atom  1, Coord  0 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.615905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025792          0.054498         0.041237
+   2          0.001799         -0.047162        -0.008972
+   3         -0.027591         -0.007336        -0.032265
+------------------------------------------------------------
+
+ Torch energy -76.383375 
+
+
+Atom  1, Coord  1 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.721730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025730          0.055609         0.041338
+   2          0.001885         -0.048170        -0.009040
+   3         -0.027615         -0.007439        -0.032298
+------------------------------------------------------------
+
+ Torch energy -76.383289 
+
+
+Atom  1, Coord  1 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.723730         0.001942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026205          0.053057         0.041303
+   2          0.001246         -0.045481        -0.009150
+   3         -0.027451         -0.007576        -0.032154
+------------------------------------------------------------
+
+ Torch energy -76.383466 
+
+
+Atom  1, Coord  2 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.000942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026035          0.054455         0.041489
+   2          0.001446         -0.046780        -0.009268
+   3         -0.027481         -0.007676        -0.032221
+------------------------------------------------------------
+
+ Torch energy -76.383361 
+
+
+Atom  1, Coord  2 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.002942
+   1         -2.465495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025900          0.054233         0.041159
+   2          0.001692         -0.046896        -0.008920
+   3         -0.027592         -0.007337        -0.032239
+------------------------------------------------------------
+
+ Torch energy -76.383396 
+
+
+A A0002    1.56840929E-03  -4.68370566E-02  -9.09445187E-03
+N A0002    1.56861654E-03  -4.68339129E-02  -9.09446392E-03  MATCH
+
+Atom  2, Coord  0 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.466495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026582          0.054254         0.041916
+   2          0.001623         -0.046922        -0.009039
+   3         -0.028205         -0.007332        -0.032877
+------------------------------------------------------------
+
+ Torch energy -76.383326 
+
+
+Atom  2, Coord  0 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.464495          2.770431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025350          0.054435         0.040726
+   2          0.001514         -0.046754        -0.009150
+   3         -0.026865         -0.007681        -0.031576
+------------------------------------------------------------
+
+ Torch energy -76.383430 
+
+
+Atom  2, Coord  1 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.769431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025965          0.054567         0.041358
+   2          0.001398         -0.046765        -0.009264
+   3         -0.027362         -0.007802        -0.032095
+------------------------------------------------------------
+
+ Torch energy -76.383364 
+
+
+Atom  2, Coord  1 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.771431        -0.695494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025972          0.054121         0.041290
+   2          0.001739         -0.046911        -0.008925
+   3         -0.027711         -0.007210        -0.032365
+------------------------------------------------------------
+
+ Torch energy -76.383393 
+
+
+Atom  2, Coord  2 - dstep
+
+PRINTING COORD-DTSEP		E1-------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.696494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.026578          0.054283         0.042046
+   2          0.001605         -0.046913        -0.009085
+   3         -0.028183         -0.007371        -0.032961
+------------------------------------------------------------
+
+ Torch energy -76.383317 
+
+
+Atom  2, Coord  2 + dstep
+
+PRINTING COORD+DTSEP		E2--------------------------------
+
+Testing elpot printing
+    0.000000
+    0.000000
+    0.000000
+Done testing elpot
+
+
+
+=================CUSTOM MODEL=====================
+
+
+ TORCH INFO 
+-----------
+
+ Special fragment coordinates (Angstroms) 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   8         -1.815220          2.663988         0.000000
+   1         -1.616905          1.722730         0.001942
+   1         -2.465495          2.770431        -0.694494
+-----------------------------------------------------------
+
+ Special fragment atom gradients 
+-----------------------------------------------------------
+  Atom            X                 Y                Z
+   1          0.025350          0.054407         0.040595
+   2          0.001533         -0.046765        -0.009103
+   3         -0.026883         -0.007642        -0.031492
+------------------------------------------------------------
+
+ Torch energy -76.383439 
+
+
+A A0003   -2.75364026E-02  -7.50629457E-03  -3.22294642E-02
+N A0003   -2.75359717E-02  -7.50628097E-03  -3.22287513E-02  MATCH
+
+GRADIENT TEST JOB COMPLETED SUCCESSFULLY
+WALL CLOCK TIME IS Wed Dec  4 22:23:33 2024
+TOTAL RUN TIME IS 7 SECONDS
+
+ANIModel() Destructor
