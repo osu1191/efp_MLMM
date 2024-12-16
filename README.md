@@ -1,6 +1,15 @@
 LibTORCH + LIBEFP
 
-===================== 
+
+ Added routines :
+=====================
+nnlib -> contains the scripted neural network potential files
+efpmd/src/torch.c
+efpmd/src/torch.h
+efpmd/torch -> contains the wrapper libraries for torch-gradient computation routine
+CMakeLists.txt -> connection between torch and EFP
+
+
  Required modules :
 =====================
  
@@ -11,7 +20,7 @@ gcc/9.3 or higher
  
 The modules can be placed in module.sh. Run "source module.sh" to load these modules.
 
-===================================
+
 Setup LibTorch and LibEFP variables
 ===================================
  
@@ -27,7 +36,6 @@ addresses needs to be changed. In "setup.sh" change the following :
 **for bash shell use export command instead of setenv>
 
 
-===============
 Compile and run
 ===============
 
